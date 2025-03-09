@@ -93,7 +93,7 @@ CREATE TABLE bronze.erp_employees (
 	login_name NVARCHAR(20),
 	address_id INT,					-- Address ID associated with the employee (foreign key to 'erp_addresses')
 	validity_start_date DATE,			-- Record validity start date in YYYYMMDD format
-	validity_end_date DATE				-- Record validity end date in YYYYMMDD format
+	validity_end_date NVARCHAR(20)			-- Record validity end date in YYYYMMDD format (problems saving as DATE)
 );
 GO
 
