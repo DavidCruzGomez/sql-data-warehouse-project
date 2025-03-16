@@ -36,6 +36,7 @@ BEGIN
 			BULK INSERT bronze.crm_sales_orders
 			FROM 'C:\sql\dwh_project\datasets\source_crm\SalesOrders.csv'
 			WITH (
+					CODEPAGE = '65001', --UTF-8 Encoding
 					FIRSTROW = 2,
 					FIELDTERMINATOR = ',',
 					TABLOCK
@@ -55,6 +56,7 @@ BEGIN
 			BULK INSERT bronze.erp_addresses
 			FROM 'C:\sql\dwh_project\datasets\source_erp\Addresses.csv'
 			WITH (
+					CODEPAGE = '65001', --UTF-8 Encoding
 					FIRSTROW = 2,
 					FIELDTERMINATOR = ',',
 					TABLOCK
@@ -70,6 +72,7 @@ BEGIN
 			BULK INSERT bronze.erp_business_partners
 			FROM 'C:\sql\dwh_project\datasets\source_erp\BusinessPartners.csv'
 			WITH (
+					CODEPAGE = '65001', --UTF-8 Encoding
 					FIRSTROW = 2,
 					FIELDTERMINATOR = ',',
 					TABLOCK
@@ -85,6 +88,7 @@ BEGIN
 			BULK INSERT bronze.erp_employees
 			FROM 'C:\sql\dwh_project\datasets\source_erp\Employees.csv'
 			WITH (
+					CODEPAGE = '65001', --UTF-8 Encoding
 					FIRSTROW = 2,
 					FIELDTERMINATOR = ',',
 					TABLOCK
@@ -100,6 +104,7 @@ BEGIN
 			BULK INSERT bronze.erp_product_categories
 			FROM 'C:\sql\dwh_project\datasets\source_erp\ProductCategories.csv'
 			WITH (
+					CODEPAGE = '65001', --UTF-8 Encoding
 					FIRSTROW = 2,
 					FIELDTERMINATOR = ',',
 					TABLOCK
@@ -115,6 +120,7 @@ BEGIN
 			BULK INSERT bronze.erp_product_category_text
 			FROM 'C:\sql\dwh_project\datasets\source_erp\ProductCategoryText.csv'
 			WITH (
+					CODEPAGE = '65001', --UTF-8 Encoding
 					FIRSTROW = 2,
 					FIELDTERMINATOR = ',',
 					TABLOCK
@@ -130,6 +136,7 @@ BEGIN
 			BULK INSERT bronze.erp_product_texts
 			FROM 'C:\sql\dwh_project\datasets\source_erp\ProductTexts.csv'
 			WITH (
+					CODEPAGE = '65001', --UTF-8 Encoding
 					FIRSTROW = 2,
 					FIELDTERMINATOR = ',',
 					TABLOCK
@@ -145,6 +152,7 @@ BEGIN
 			BULK INSERT bronze.erp_products
 			FROM 'C:\sql\dwh_project\datasets\source_erp\Products.csv'
 			WITH (
+					CODEPAGE = '65001', --UTF-8 Encoding
 					FIRSTROW = 2,
 					FIELDTERMINATOR = ',',
 					TABLOCK
@@ -160,6 +168,7 @@ BEGIN
 			BULK INSERT bronze.erp_sales_order_items
 			FROM 'C:\sql\dwh_project\datasets\source_erp\SalesOrderItems.csv'
 			WITH (
+					CODEPAGE = '65001', --UTF-8 Encoding
 					FIRSTROW = 2,
 					FIELDTERMINATOR = ',',
 					TABLOCK
