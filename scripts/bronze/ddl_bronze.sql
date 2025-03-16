@@ -156,8 +156,8 @@ CREATE TABLE bronze.erp_product_texts (
 	prod_category_id CHAR(7),			-- Unique identifier for the product category 
 	language CHAR(2),				-- Language code for the description
 	short_descr NVARCHAR(50),			-- Short description of the product category
-	MEDIUM_DESCR NVARCHAR(100) NULL, 	
-	LONG_DESCR NVARCHAR(200) NULL			-- Long description (completely empty in this case)
+	medium_descr NVARCHAR(100) NULL, 	
+	long_descr NVARCHAR(200) NULL			-- Long description (completely empty in this case)
 );
 GO
 
