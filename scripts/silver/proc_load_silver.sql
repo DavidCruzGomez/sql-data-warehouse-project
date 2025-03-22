@@ -344,34 +344,57 @@ BEGIN
         PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
         PRINT '>> -------------';
 
+		-- Loading erp_sales_order_items
+        SET @start_time = GETDATE();
+		PRINT '>> Truncating Table: silver.erp_sales_order_items';
+		TRUNCATE TABLE silver.erp_sales_order_items;
+		PRINT '>> Inserting Data Into: silver.erp_sales_order_items';
+		INSERT INTO silver.erp_sales_order_items (
+			sls_order_id,
+			sls_order_item,
+			sls_order_product_id,
+			sls_order_currency,
+			sls_order_gross_amount,
+			sls_order_net_amount,
+			sls_order_tax_amount,
+			sls_order_item_atp_status,
+			sls_order_quantity,
+			sls_order_quantity_unit,
+			sls_order_delivery_date
+		)
+		SELECT
+			sales_order_id,
+			sales_order_item,
+			product_id,
+			currency,
+			gross_amount,
+			net_amount,
+			tax_amount,
+			item_atp_status,
+			quantity,
+			CASE 
+			    	WHEN quantity_unit = 'EA' THEN 'Each'
+			END AS quantity_unit,
+			delivery_date
 
---silver.erp_sales_order_items
-INSERT INTO silver.erp_sales_order_items(
-sls_order_id,
-sls_order_item,
-sls_order_product_id,
-sls_order_currency,
-sls_order_gross_amount,
-sls_order_net_amount,
-sls_order_tax_amount,
-sls_order_item_atp_status,
-sls_order_quantity,
-sls_order_quantity_unit,
-sls_order_delivery_date
-)
-SELECT
-sales_order_id,
-sales_order_item,
-product_id,
-currency,
-gross_amount,
-net_amount,
-tax_amount,
-item_atp_status,
-quantity,
-CASE 
-    WHEN quantity_unit = 'EA' THEN 'Each'
-END AS quantity_unit,
-delivery_date
+		FROM bronze.erp_sales_order_items
+		SET @end_time = GETDATE();
+		PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+        PRINT '>> -------------';
 
-FROM bronze.erp_sales_order_items
+		SET @batch_end_time = GETDATE();
+		PRINT '=========================================='
+		PRINT 'Loading Silver Layer is Completed';
+        PRINT '   - Total Load Duration: ' + CAST(DATEDIFF(SECOND, @batch_start_time, @batch_end_time) AS NVARCHAR) + ' seconds';
+		PRINT '=========================================='
+		
+	END TRY
+	BEGIN CATCH
+		PRINT '=========================================='
+		PRINT 'ERROR OCCURED DURING LOADING BRONZE LAYER'
+		PRINT 'Error Message' + ERROR_MESSAGE();
+		PRINT 'Error Message' + CAST (ERROR_NUMBER() AS NVARCHAR);
+		PRINT 'Error Message' + CAST (ERROR_STATE() AS NVARCHAR);
+		PRINT '=========================================='
+	END CATCH
+END
