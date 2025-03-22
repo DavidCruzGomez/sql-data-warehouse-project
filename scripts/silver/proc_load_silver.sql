@@ -1,62 +1,101 @@
---silver.crm_sales_orders
-INSERT INTO silver.crm_sales_orders(
-sls_order_id,
-sls_order_created_by,
-sls_order_created_at,
-sls_order_changed_by,
-sls_order_changed_at,
-sls_order_fisc_variant,
-sls_order_fiscal_year_period,
-sls_order_partner_id,
-sls_order_org,
-sls_order_currency,
-sls_order_gross_amount,
-sls_order_net_amount,
-sls_order_tax_amount,
-sls_order_lifecycle_status,
-sls_order_billing_status,
-sls_order_delivery_status
-)
-SELECT
-sales_order_id,
-created_by,
-created_at,
-changed_by,
-changed_at,
-fisc_variant,
-FORMAT(EOMONTH(DATEFROMPARTS(LEFT(fiscal_year_period, 4),				--	Transform to YYYY-MM-DD Format
-                                 fiscal_year_period % 100, 
-                                 1)), 'yyyy-MM-dd') AS fiscal_year_period,
-partner_id,
-sales_org,
-currency,
-gross_amount,
-net_amount,
-tax_amount,
-CASE UPPER(TRIM(lifecycle_status)) 
-    WHEN 'C' THEN 'Completed'
-    WHEN 'I' THEN 'Incompleted'
-    WHEN 'X' THEN 'Cancelled'
-END AS lifecycle_status,
+/*
+===============================================================================
+Stored Procedure: Load Silver Layer (Bronze -> Silver)
+===============================================================================
+Script Purpose:
+    This stored procedure performs the ETL (Extract, Transform, Load) process to 
+    populate the 'silver' schema tables from the 'bronze' schema.
+	Actions Performed:
+		- Truncates Silver tables.
+		- Inserts transformed and cleansed data from Bronze into Silver tables.
+		
+Parameters:
+    None. 
+	  This stored procedure does not accept any parameters or return any values.
 
-CASE UPPER(TRIM(billing_status)) 
-    WHEN 'C' THEN 'Completed'
-    WHEN 'I' THEN 'Incompleted'
-    WHEN 'X' THEN 'Cancelled'
-END AS billing_status,
+Usage Example:
+    EXEC Silver.load_silver;
+===============================================================================
+*/
 
-CASE UPPER(TRIM(delivery_status)) 
-    WHEN 'C' THEN 'Completed'
-    WHEN 'I' THEN 'Incompleted'
-    WHEN 'X' THEN 'Cancelled'
-END AS delivery_status
+CREATE OR ALTER PROCEDURE silver.load_silver AS
+BEGIN
+    DECLARE @start_time DATETIME, @end_time DATETIME, @batch_start_time DATETIME, @batch_end_time DATETIME; 
+    BEGIN TRY
+        SET @batch_start_time = GETDATE();
+        PRINT '================================================';
+        PRINT 'Loading Silver Layer';
+        PRINT '================================================';
 
-FROM (
-	SELECT 
-	*,
-	ROW_NUMBER() OVER (PARTITION BY sales_order_id ORDER BY changed_at DESC) as flag_last
-	FROM bronze.crm_sales_orders
-)t WHERE flag_last = 1
+		PRINT '------------------------------------------------';
+		PRINT 'Loading CRM Tables';
+		PRINT '------------------------------------------------';
+
+		-- Loading silver.crm_sales_orders
+        SET @start_time = GETDATE();
+		PRINT '>> Truncating Table: silver.crm_sales_orders';
+		TRUNCATE TABLE silver.crm_sales_orders;
+		PRINT '>> Inserting Data Into: silver.crm_sales_orders';
+		INSERT INTO silver.crm_sales_orders (
+			sls_order_id,
+			sls_order_created_by,
+			sls_order_created_at,
+			sls_order_changed_by,
+			sls_order_changed_at,
+			sls_order_fisc_variant,
+			sls_order_fiscal_year_period,
+			sls_order_partner_id,
+			sls_order_org,
+			sls_order_currency,
+			sls_order_gross_amount,
+			sls_order_net_amount,
+			sls_order_tax_amount,
+			sls_order_lifecycle_status,
+			sls_order_billing_status,
+			sls_order_delivery_status
+		)
+		SELECT
+			sales_order_id,
+			created_by,
+			created_at,
+			changed_by,
+			changed_at,
+			fisc_variant,
+			FORMAT(EOMONTH(DATEFROMPARTS(LEFT(fiscal_year_period, 4),				--	Transform to YYYY-MM-DD Format
+			                                 fiscal_year_period % 100, 
+			                                 1)), 'yyyy-MM-dd') AS fiscal_year_period,
+			partner_id,
+			sales_org,
+			currency,
+			gross_amount,
+			net_amount,
+			tax_amount,
+			CASE UPPER(TRIM(lifecycle_status)) 
+			    WHEN 'C' THEN 'Completed'
+			    WHEN 'I' THEN 'Incompleted'
+			    WHEN 'X' THEN 'Cancelled'
+			END AS lifecycle_status,
+			CASE UPPER(TRIM(billing_status)) 
+			    WHEN 'C' THEN 'Completed'
+			    WHEN 'I' THEN 'Incompleted'
+			    WHEN 'X' THEN 'Cancelled'
+			END AS billing_status,
+			CASE UPPER(TRIM(delivery_status)) 
+			    WHEN 'C' THEN 'Completed'
+			    WHEN 'I' THEN 'Incompleted'
+			    WHEN 'X' THEN 'Cancelled'
+			END AS delivery_status
+		FROM (
+			SELECT 
+				*,
+				ROW_NUMBER() OVER (PARTITION BY sales_order_id ORDER BY changed_at DESC) as flag_last
+			FROM bronze.crm_sales_orders
+		)t
+		WHERE flag_last = 1
+		SET @end_time = GETDATE();
+        PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+        PRINT '>> -------------';
+
 
 --silver.erp_addresses
 
