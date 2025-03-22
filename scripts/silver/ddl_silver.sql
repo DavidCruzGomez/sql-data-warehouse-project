@@ -51,7 +51,7 @@ CREATE TABLE silver.erp_addresses (
 	addr_validity_start_date DATE,					-- Address validity start date in YYYYMMDD format
 	--addr_validity_end_date DATE,					-- Address validity end date (doesn´t provide relevant information)
 	addr_latitude DECIMAL(10,6),
-    addr_longitude DECIMAL(10,6),
+    	addr_longitude DECIMAL(10,6),
 	dwh_create_date DATETIME2 DEFAULT GETDATE()
 );
 GO
@@ -147,10 +147,10 @@ CREATE TABLE silver.erp_products (
 	prod_currency CHAR(3),
 	prod_price DECIMAL(7,2),
 	--prod_width DECIMAL(5,1) NULL,					-- Width of the product (completely empty)
-    --prod_depth DECIMAL(5,1) NULL,					-- Depth of the product (completely empty)
-    --prod_height DECIMAL(5,1) NULL,					-- Height of the product (completely empty)
+    	--prod_depth DECIMAL(5,1) NULL,					-- Depth of the product (completely empty)
+    	--prod_height DECIMAL(5,1) NULL,					-- Height of the product (completely empty)
 	--prod_dimension_unit CHAR(2) NULL,				-- Unit of measure for dimensions (completely empty)
-    --product_pic_url NVARCHAR(200) NULL,				-- URL to the product picture, if available (completely empty)
+    	--product_pic_url NVARCHAR(200) NULL,				-- URL to the product picture, if available (completely empty)
 	dwh_create_date DATETIME2 DEFAULT GETDATE()
 );
 GO
