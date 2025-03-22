@@ -85,13 +85,7 @@ BEGIN
 			    WHEN 'I' THEN 'Incompleted'
 			    WHEN 'X' THEN 'Cancelled'
 			END AS delivery_status
-		FROM (
-			SELECT 
-				*,
-				ROW_NUMBER() OVER (PARTITION BY sales_order_id ORDER BY changed_at DESC) as flag_last
-			FROM bronze.crm_sales_orders
-		)t
-		WHERE flag_last = 1
+		FROM bronze.crm_sales_orders
 		SET @end_time = GETDATE();
         PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
         PRINT '>> -------------';
@@ -130,54 +124,49 @@ BEGIN
 			validity_start_date,
 			latitude,
 			longitude
-		FROM (
-			SELECT 
-			*,
-			ROW_NUMBER() OVER (PARTITION BY address_id ORDER BY validity_start_date DESC) as flag_last
-			FROM bronze.erp_addresses
-		)t WHERE flag_last = 1
+		FROM bronze.erp_addresses
+		SET @end_time = GETDATE();
+        PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+        PRINT '>> -------------';
 
-
---silver.erp_business_partners
-INSERT INTO silver.erp_business_partners(
-ptnr_id,
-ptnr_role,
-ptnr_email_address,
-ptnr_phone_number,
-ptnr_web_address,
-ptnr_address_id,
-ptnr_company_name,
-ptnr_legal_form,
-ptnr_created_by,
-ptnr_created_at,
-ptnr_changed_by,
-ptnr_changed_at,
-ptnr_currency
-)
-SELECT
-partner_id,
-CASE 
-    WHEN partner_role = 1 THEN 'Supplier'
-    WHEN partner_role = 2 THEN 'Customer'
-END AS partner_role,
-email_address,
-phone_number,
-web_address,
-address_id,
-company_name,
-legal_form,
-created_by,
-created_at,
-changed_by,
-changed_at,
-currency
-
-FROM (
-	SELECT 
-	*,
-	ROW_NUMBER() OVER (PARTITION BY partner_id ORDER BY changed_at DESC) as flag_last
-	FROM bronze.erp_business_partners
-)t WHERE flag_last = 1
+		-- Loading erp_business_partners
+        SET @start_time = GETDATE();
+		PRINT '>> Truncating Table: silver.erp_business_partners';
+		TRUNCATE TABLE silver.erp_business_partners;
+		PRINT '>> Inserting Data Into: silver.erp_business_partners';
+		INSERT INTO silver.erp_business_partners (
+			ptnr_id,
+			ptnr_role,
+			ptnr_email_address,
+			ptnr_phone_number,
+			ptnr_web_address,
+			ptnr_address_id,
+			ptnr_company_name,
+			ptnr_legal_form,
+			ptnr_created_by,
+			ptnr_created_at,
+			ptnr_changed_by,
+			ptnr_changed_at,
+			ptnr_currency
+		)
+		SELECT
+			partner_id,
+			CASE 
+			    WHEN partner_role = 1 THEN 'Supplier'
+			    WHEN partner_role = 2 THEN 'Customer'
+			END AS partner_role,
+			email_address,
+			phone_number,
+			web_address,
+			address_id,
+			company_name,
+			legal_form,
+			created_by,
+			created_at,
+			changed_by,
+			changed_at,
+			currency
+		FROM bronze.erp_business_partners
 
 
 --silver.erp_employees
