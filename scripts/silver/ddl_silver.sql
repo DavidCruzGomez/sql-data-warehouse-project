@@ -185,7 +185,7 @@ CREATE TABLE silver.erp_sales_order_items (
 	sls_order_item_atp_status CHAR(1),				-- ATP (Available to Promise) status of the line item
 	--sls_order_op_item_pos NVARCHAR(10) NULL,			-- Operational position of the line item (completely empty)
 	sls_order_quantity INT,						-- Quantity ordered for the product
-	sls_order_quantity_unit CHAR(2),
+	sls_order_quantity_unit NVARCHAR(10),
 	sls_order_delivery_date DATE,
 	dwh_create_date DATETIME2 DEFAULT GETDATE()
 );
