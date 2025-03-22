@@ -175,7 +175,7 @@ GO
 
 CREATE TABLE silver.erp_sales_order_items (
 	sls_order_id CHAR(10),						-- Unique identifier for the sales order
-    sls_order_item CHAR(10),						-- Line item number within the sales order
+    	sls_order_item CHAR(10),					-- Line item number within the sales order
 	sls_order_product_id CHAR(7),					-- Product identifier associated with the line item
 	--sls_order_note_id NVARCHAR(10) NULL,				-- Note identifier for the line item (completely empty)
 	sls_order_currency CHAR(3),					-- Currency code for pricing
