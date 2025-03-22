@@ -14,14 +14,14 @@ IF OBJECT_ID ('silver.crm_sales_orders' , 'U') IS NOT NULL
 GO
 
 CREATE TABLE silver.crm_sales_orders (
-	sls_order_id CHAR(10),					      -- Unique order identifier
-	sls_order_created_by CHAR(10),				      -- ID of the user who created the order
-	sls_order_created_at DATE,				      -- Order creation date in YYYYMMDD format
-	sls_order_changed_by CHAR(10),			              -- ID of the user who modified the order
-	sls_order_changed_at DATE,				      -- Last modification date in YYYYMMDD format
-	sls_order_fisc_variant NVARCHAR(10),			      -- Fiscal variant code
-	sls_order_fiscal_year_period NVARCHAR(10),	-- Fiscal period in YYYYPPP format
-	--sls_order_note_id NVARCHAR(10) NULL,			-- Notes field (Dropped for being completely empty)
+	sls_order_id CHAR(10),					      	-- Unique order identifier
+	sls_order_created_by CHAR(10),				      	-- ID of the user who created the order
+	sls_order_created_at DATE,				      	-- Order creation date in YYYYMMDD format
+	sls_order_changed_by CHAR(10),			              	-- ID of the user who modified the order
+	sls_order_changed_at DATE,				      	-- Last modification date in YYYYMMDD format
+	sls_order_fisc_variant NVARCHAR(10),			      	-- Fiscal variant code
+	sls_order_fiscal_year_period NVARCHAR(10),			-- Fiscal period in YYYYPPP format
+	--sls_order_note_id NVARCHAR(10) NULL,				-- Notes field (Dropped for being completely empty)
 	sls_order_partner_id CHAR(10),				
 	sls_order_org NVARCHAR(10),					-- Sales organization
 	sls_order_currency CHAR(3),					-- ISO currency code
