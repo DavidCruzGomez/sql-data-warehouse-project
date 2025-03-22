@@ -61,7 +61,7 @@ BEGIN
 			changed_by,
 			changed_at,
 			fisc_variant,
-			FORMAT(EOMONTH(DATEFROMPARTS(LEFT(fiscal_year_period, 4),				--	Transform to YYYY-MM-DD Format
+			FORMAT(EOMONTH(DATEFROMPARTS(LEFT(fiscal_year_period, 4),			-- Transform to YYYY-MM-DD Format
 			                                 fiscal_year_period % 100, 
 			                                 1)), 'yyyy-MM-dd') AS fiscal_year_period,
 			partner_id,
@@ -154,7 +154,7 @@ BEGIN
 			CASE 
 			    WHEN partner_role = 1 THEN 'Supplier'
 			    WHEN partner_role = 2 THEN 'Customer'
-			END AS partner_role,
+			END AS partner_role, -- Map partner role codes to descriptive values
 			email_address,
 			phone_number,
 			web_address,
@@ -197,11 +197,11 @@ BEGIN
 			CASE 
 			    WHEN sex = 'M' THEN 'Male'
 			    WHEN sex = 'F' THEN 'Female'
-			END AS sex,
+			END AS sex, -- Normalize sex values
 			
 			CASE 
 			    WHEN language = 'E' THEN 'English'
-			END AS language,
+			END AS language, -- Normalize language values
 			REPLACE(REPLACE(REPLACE(phone_number, ' ', ''), '-', ''), '.', '') AS phone_number, -- Normalize by removing spaces, hyphens, and periods
 			email_address,
 			login_name,
@@ -245,7 +245,7 @@ BEGIN
 			prod_category_id,
 			CASE 
 			    WHEN language = 'EN' THEN 'English'
-			END AS language,
+			END AS language, -- Normalize lenguage values
 			short_descr
 		FROM bronze.erp_product_category_text
 		SET @end_time = GETDATE();
@@ -285,7 +285,7 @@ BEGIN
 			tax_tariff_code,
 			CASE 
 			    WHEN quantity_unit = 'EA' THEN 'Each'
-			END AS quantity_unit,
+			END AS quantity_unit, -- Normalize quantity unit values
 			weight_measure,
 			weight_unit,
 			currency,
@@ -313,7 +313,7 @@ BEGIN
 			        CASE 
 			            	WHEN language = 'EN' THEN 'English'
 			            	WHEN language = 'DE' THEN 'German'
-			        END, 
+			        END, -- Normalize language values
 			        ' / '
 			    ) AS language,  -- Concatenate languages
 			    STRING_AGG(CONCAT(language, ' ', short_descr), ' / ') AS short_descr,
@@ -331,9 +331,9 @@ BEGIN
 			CASE 
 		        	WHEN language = 'EN' THEN 'English'
 		        	WHEN language = 'DE' THEN 'German'
-		    	END AS language,
+		    	END AS language, -- Normalize lanuguage values
 		    	short_descr,
-		    	TRIM(COALESCE(medium_descr, short_descr)) AS medium_descr
+		    	TRIM(COALESCE(medium_descr, short_descr)) AS medium_descr -- Handle medium description missing values with short description values
 		FROM 
 		    	bronze.erp_product_texts
 		WHERE
@@ -374,7 +374,7 @@ BEGIN
 			quantity,
 			CASE 
 			    	WHEN quantity_unit = 'EA' THEN 'Each'
-			END AS quantity_unit,
+			END AS quantity_unit, -- Normalize quantity unit values
 			delivery_date
 
 		FROM bronze.erp_sales_order_items
