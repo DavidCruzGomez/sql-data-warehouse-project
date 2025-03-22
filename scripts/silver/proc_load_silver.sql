@@ -116,7 +116,7 @@ BEGIN
 			address_id,
 			city,
 			postal_code,
-			TRIM(street) AS street,
+			TRIM(street) AS street, -- Remove spaces before and after
 			ISNULL(building, -1) AS building, -- Transform null values to -1
 			country,
 			region,
@@ -245,7 +245,7 @@ BEGIN
 			prod_category_id,
 			CASE 
 			    WHEN language = 'EN' THEN 'English'
-			END AS language, -- Normalize lenguage values
+			END AS language, -- Normalize language values
 			short_descr
 		FROM bronze.erp_product_category_text
 		SET @end_time = GETDATE();
@@ -315,7 +315,7 @@ BEGIN
 			            	WHEN language = 'DE' THEN 'German'
 			        END, -- Normalize language values
 			        ' / '
-			    ) AS language,  -- Concatenate languages
+			    ) AS language,  -- Concatenate and normalize languages
 			    STRING_AGG(CONCAT(language, ' ', short_descr), ' / ') AS short_descr,
 			    STRING_AGG(CONCAT(language, ' ', TRIM(COALESCE(medium_descr, short_descr))), ' / ') AS medium_descr
 		FROM bronze.erp_product_texts
@@ -331,7 +331,7 @@ BEGIN
 			CASE 
 		        	WHEN language = 'EN' THEN 'English'
 		        	WHEN language = 'DE' THEN 'German'
-		    	END AS language, -- Normalize lanuguage values
+		    	END AS language, -- Normalize language values
 		    	short_descr,
 		    	TRIM(COALESCE(medium_descr, short_descr)) AS medium_descr -- Handle medium description missing values with short description values
 		FROM 
