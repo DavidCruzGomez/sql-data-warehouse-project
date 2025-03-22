@@ -31,7 +31,7 @@ BEGIN
 		PRINT 'Loading CRM Tables';
 		PRINT '------------------------------------------------';
 
-		-- Loading silver.crm_sales_orders
+		-- Loading crm_sales_orders
         SET @start_time = GETDATE();
 		PRINT '>> Truncating Table: silver.crm_sales_orders';
 		TRUNCATE TABLE silver.crm_sales_orders;
@@ -96,41 +96,46 @@ BEGIN
         PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
         PRINT '>> -------------';
 
+		PRINT '------------------------------------------------';
+		PRINT 'Loading ERP Tables';
+		PRINT '------------------------------------------------';
 
---silver.erp_addresses
-
-INSERT INTO silver.erp_addresses(
-addr_id,
-addr_city,
-addr_postal_code,
-addr_street,
-addr_building,
-addr_country,
-addr_region,
-addr_address_type,
-addr_validity_start_date,
-addr_latitude,
-addr_longitude
-)
-SELECT
-address_id,
-city,
-postal_code,
-TRIM(street) AS street,
-ISNULL(building, -1) AS building, --Transform null values to -1
-country,
-region,
-address_type,
-validity_start_date,
-latitude,
-longitude
-
-FROM (
-	SELECT 
-	*,
-	ROW_NUMBER() OVER (PARTITION BY address_id ORDER BY validity_start_date DESC) as flag_last
-	FROM bronze.erp_addresses
-)t WHERE flag_last = 1
+        -- Loading erp_addresses
+        SET @start_time = GETDATE();
+		PRINT '>> Truncating Table: silver.erp_addresses';
+		TRUNCATE TABLE silver.erp_addresses;
+		PRINT '>> Inserting Data Into: silver.erp_addresses';
+		INSERT INTO silver.erp_addresses (
+			addr_id,
+			addr_city,
+			addr_postal_code,
+			addr_street,
+			addr_building,
+			addr_country,
+			addr_region,
+			addr_address_type,
+			addr_validity_start_date,
+			addr_latitude,
+			addr_longitude
+		)
+		SELECT
+			address_id,
+			city,
+			postal_code,
+			TRIM(street) AS street,
+			ISNULL(building, -1) AS building, -- Transform null values to -1
+			country,
+			region,
+			address_type,
+			validity_start_date,
+			latitude,
+			longitude
+		FROM (
+			SELECT 
+			*,
+			ROW_NUMBER() OVER (PARTITION BY address_id ORDER BY validity_start_date DESC) as flag_last
+			FROM bronze.erp_addresses
+		)t WHERE flag_last = 1
 
 
 --silver.erp_business_partners
