@@ -167,169 +167,182 @@ BEGIN
 			changed_at,
 			currency
 		FROM bronze.erp_business_partners
+		SET @end_time = GETDATE();
+        PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+        PRINT '>> -------------';
 
+		-- Loading erp_employees
+        SET @start_time = GETDATE();
+		PRINT '>> Truncating Table: silver.erp_employees';
+		TRUNCATE TABLE silver.erp_employees;
+		PRINT '>> Inserting Data Into: silver.erp_employees';
+		INSERT INTO silver.erp_employees (
+			emp_id,
+			emp_name_first,
+			emp_name_middle,
+			emp_name_last,
+			emp_sex,
+			emp_language,
+			emp_phone_number,
+			emp_email_address,
+			emp_login_name,
+			emp_address_id,
+			emp_validity_start_date
+		)
+		SELECT
+			employee_id,
+			REPLACE(name_first, '"', '') AS name_first,  -- Remove quotes from name_first
+			COALESCE(name_middle, 'N/A') AS name_middle, -- Replace nulls in name_middle with 'N/A'
+			name_last,
+			CASE 
+			    WHEN sex = 'M' THEN 'Male'
+			    WHEN sex = 'F' THEN 'Female'
+			END AS sex,
+			
+			CASE 
+			    WHEN language = 'E' THEN 'English'
+			END AS language,
+			REPLACE(REPLACE(REPLACE(phone_number, ' ', ''), '-', ''), '.', '') AS phone_number, -- Normalize by removing spaces, hyphens, and periods
+			email_address,
+			login_name,
+			address_id,
+			validity_start_date
+		FROM bronze.erp_employees
+		SET @end_time = GETDATE();
+        PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+        PRINT '>> -------------';
 
---silver.erp_employees
-INSERT INTO silver.erp_employees(
-emp_id,
-emp_name_first,
-emp_name_middle,
-emp_name_last,
-emp_sex,
-emp_language,
-emp_phone_number,
-emp_email_address,
-emp_login_name,
-emp_address_id,
-emp_validity_start_date
-)
-SELECT
-employee_id,
-REPLACE(name_first, '"', '') AS name_first,  -- Remove quotes from name_first
-COALESCE(name_middle, 'N/A') AS name_middle, -- Replace nulls in name_middle with 'N/A'
-name_last,
-CASE 
-    WHEN sex = 'M' THEN 'Male'
-    WHEN sex = 'F' THEN 'Female'
-END AS sex,
+		-- Loading erp_product_categories
+        SET @start_time = GETDATE();
+		PRINT '>> Truncating Table: silver.erp_product_categories';
+		TRUNCATE TABLE silver.erp_product_categories;
+		PRINT '>> Inserting Data Into: silver.erp_product_categories';
+		INSERT INTO silver.erp_product_categories (
+			prod_category_id,
+			prod_cat_created_by,
+			prod_cat_created_at
+		)
+		SELECT
+			prod_category_id,
+			created_by,
+			created_at
+		FROM bronze.erp_product_categories
+		SET @end_time = GETDATE();
+        PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+        PRINT '>> -------------';
 
-CASE 
-    WHEN language = 'E' THEN 'English'
-END AS language,
-REPLACE(REPLACE(REPLACE(phone_number, ' ', ''), '-', ''), '.', '') AS phone_number, -- Normalize by removing spaces, hyphens, and periods
-email_address,
-login_name,
-address_id,
-validity_start_date
+		-- Loading erp_product_category_text
+        SET @start_time = GETDATE();
+		PRINT '>> Truncating Table: silver.erp_product_category_text';
+		TRUNCATE TABLE silver.erp_product_category_text;
+		PRINT '>> Inserting Data Into: silver.erp_product_category_text';
+		INSERT INTO silver.erp_product_category_text (
+			prod_category_id,
+			language,
+			short_descr
+		)
+		SELECT
+			prod_category_id,
+			CASE 
+			    WHEN language = 'EN' THEN 'English'
+			END AS language,
+			short_descr
+		FROM bronze.erp_product_category_text
+		SET @end_time = GETDATE();
+        PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+        PRINT '>> -------------';
 
-FROM (
-	SELECT 
-	*,
-	ROW_NUMBER() OVER (PARTITION BY employee_id ORDER BY validity_start_date DESC) as flag_last
-	FROM bronze.erp_employees
-)t WHERE flag_last = 1
+		-- Loading erp_products
+        SET @start_time = GETDATE();
+		PRINT '>> Truncating Table: silver.erp_products';
+		TRUNCATE TABLE silver.erp_products;
+		PRINT '>> Inserting Data Into: silver.erp_products';
+		INSERT INTO silver.erp_products (
+			product_id,
+			prod_type_code,
+			prod_category_id,
+			prod_created_by,
+			prod_created_at,
+			prod_changed_by,
+			prod_changed_at,
+			prod_supplier_partner_id,
+			prod_tax_tariff_code,
+			prod_quantity_unit,
+			prod_weight_measure,
+			prod_weight_unit,
+			prod_currency,
+			prod_price
+		)
+		SELECT
+			product_id,
+			type_code,
+			prod_category_id,
+			created_by,
+			created_at,
+			changed_by,
+			changed_at,
+			supplier_partner_id,
+			tax_tariff_code,
+			CASE 
+			    WHEN quantity_unit = 'EA' THEN 'Each'
+			END AS quantity_unit,
+			weight_measure,
+			weight_unit,
+			currency,
+			price
+		FROM bronze.erp_products
+		SET @end_time = GETDATE();
+        PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+        PRINT '>> -------------';
 
---silver.erp_product_categories
-INSERT INTO silver.erp_product_categories(
-prod_category_id,
-prod_cat_created_by,
-prod_cat_created_at
-)
-SELECT
-prod_category_id,
-created_by,
-created_at
+		-- Loading erp_product_texts
+        SET @start_time = GETDATE();
+		PRINT '>> Truncating Table: silver.erp_product_texts';
+		TRUNCATE TABLE silver.erp_product_texts;
+		PRINT '>> Inserting Data Into: silver.erp_product_texts';
+		INSERT INTO silver.erp_product_texts (
+			prod_category_id,
+			language,
+			short_descr,
+			medium_descr
+		)
+		-- For the RC-1055 and RC-1056 records (concatenate descriptions and languages)
+		SELECT 
+			prod_category_id,
+			STRING_AGG(
+			        CASE 
+			            	WHEN language = 'EN' THEN 'English'
+			            	WHEN language = 'DE' THEN 'German'
+			        END, 
+			        ' / '
+			    ) AS language,  -- Concatenate languages
+			    STRING_AGG(CONCAT(language, ' ', short_descr), ' / ') AS short_descr,
+			    STRING_AGG(CONCAT(language, ' ', TRIM(COALESCE(medium_descr, short_descr))), ' / ') AS medium_descr
+		FROM bronze.erp_product_texts
+		WHERE
+		    prod_category_id IN ('RC-1055', 'RC-1056')
+		GROUP BY 
+		    prod_category_id
+		UNION ALL
 
-FROM (
-	SELECT 
-	*,
-	ROW_NUMBER() OVER (PARTITION BY prod_category_id ORDER BY created_at DESC) as flag_last
-	FROM bronze.erp_product_categories
-)t WHERE flag_last = 1
-
---silver.erp_product_category_text
-INSERT INTO silver.erp_product_category_text(
-prod_category_id,
-language,
-short_descr
-)
-SELECT
-prod_category_id,
-CASE 
-    WHEN language = 'EN' THEN 'English'
-END AS language,
-short_descr
-
-FROM (
-	SELECT 
-	*,
-	ROW_NUMBER() OVER (PARTITION BY prod_category_id ORDER BY short_descr DESC) as flag_last
-	FROM bronze.erp_product_category_text
-)t WHERE flag_last = 1
-
---silver.erp_products
-INSERT INTO silver.erp_products(
-product_id,
-prod_type_code,
-prod_category_id,
-prod_created_by,
-prod_created_at,
-prod_changed_by,
-prod_changed_at,
-prod_supplier_partner_id,
-prod_tax_tariff_code,
-prod_quantity_unit,
-prod_weight_measure,
-prod_weight_unit,
-prod_currency,
-prod_price
-)
-SELECT
-product_id,
-type_code,
-prod_category_id,
-created_by,
-created_at,
-changed_by,
-changed_at,
-supplier_partner_id,
-tax_tariff_code,
-CASE 
-    WHEN quantity_unit = 'EA' THEN 'Each'
-END AS quantity_unit,
-weight_measure,
-weight_unit,
-currency,
-price
-
-FROM bronze.erp_products
-
---silver.erp_product_texts
-INSERT INTO silver.erp_product_texts(
-prod_category_id,
-language,
-short_descr,
-medium_descr
-
-)
-
--- Para los registros RC-1055 y RC-1056 (concatenar descripciones e idiomas)
-SELECT 
-    prod_category_id,
-    STRING_AGG(
-        CASE 
-            WHEN language = 'EN' THEN 'English'
-            WHEN language = 'DE' THEN 'German'
-        END, 
-        ' / '
-    ) AS language,  -- Concatenar idiomas
-    STRING_AGG(CONCAT(language, ' ', short_descr), ' / ') AS short_descr,
-    STRING_AGG(CONCAT(language, ' ', TRIM(COALESCE(medium_descr, short_descr))), ' / ') AS medium_descr
-FROM 
-    bronze.erp_product_texts
-WHERE
-    prod_category_id IN ('RC-1055', 'RC-1056')
-GROUP BY 
-    prod_category_id
-
-UNION ALL
-
--- Para el resto de los registros (sin concatenación)
-SELECT
-    prod_category_id,
-    CASE 
-        WHEN language = 'EN' THEN 'English'
-        WHEN language = 'DE' THEN 'German'
-    END AS language,
-    short_descr,
-    TRIM(COALESCE(medium_descr, short_descr)) AS medium_descr
-FROM 
-    bronze.erp_product_texts
-WHERE
-    prod_category_id NOT IN ('RC-1055', 'RC-1056')
-ORDER BY 
-    prod_category_id;
-
+		-- For the rest of the records (without concatenation)
+		SELECT
+			prod_category_id,
+			CASE 
+		        	WHEN language = 'EN' THEN 'English'
+		        	WHEN language = 'DE' THEN 'German'
+		    	END AS language,
+		    	short_descr,
+		    	TRIM(COALESCE(medium_descr, short_descr)) AS medium_descr
+		FROM 
+		    	bronze.erp_product_texts
+		WHERE
+		    	prod_category_id NOT IN ('RC-1055', 'RC-1056')
+		ORDER BY 
+		    	prod_category_id;
+		SET @end_time = GETDATE();
+        PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
+        PRINT '>> -------------';
 
 
 --silver.erp_sales_order_items
