@@ -74,17 +74,17 @@ BEGIN
 			    WHEN 'C' THEN 'Completed'
 			    WHEN 'I' THEN 'Incompleted'
 			    WHEN 'X' THEN 'Cancelled'
-			END AS lifecycle_status,
+			END AS lifecycle_status, -- Normalize lifecycle status values to readable format
 			CASE UPPER(TRIM(billing_status)) 
 			    WHEN 'C' THEN 'Completed'
 			    WHEN 'I' THEN 'Incompleted'
 			    WHEN 'X' THEN 'Cancelled'
-			END AS billing_status,
+			END AS billing_status, -- Normalize billing status values to readable format
 			CASE UPPER(TRIM(delivery_status)) 
 			    WHEN 'C' THEN 'Completed'
 			    WHEN 'I' THEN 'Incompleted'
 			    WHEN 'X' THEN 'Cancelled'
-			END AS delivery_status
+			END AS delivery_status -- Normalize delivery status values to readable format
 		FROM bronze.crm_sales_orders
 		SET @end_time = GETDATE();
         PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
