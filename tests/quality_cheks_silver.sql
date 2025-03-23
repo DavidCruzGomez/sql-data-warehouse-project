@@ -20,65 +20,73 @@ Usage Notes:
 -- ====================================================================
 -- Checking 'silver.crm_sales_orders'
 -- ====================================================================
-
 --Check For Nulls or Duplicates in Primary Key
 --Expectation: No Result
-
 SELECT
-sales_order_id,
-COUNT(*)
+	sales_order_id,
+	COUNT(*)
 FROM bronze.crm_sales_orders
 GROUP BY sales_order_id 
-HAVING COUNT (*) > 1 OR sales_order_id IS NULL
+HAVING COUNT (*) > 1 OR sales_order_id IS NULL;
 
 --Check for unwanted Spaces
 --Expectation: No Result
-SELECT fisc_variant
+SELECT
+	fisc_variant
 FROM bronze.crm_sales_orders
-WHERE fisc_variant != TRIM(fisc_variant)
+WHERE fisc_variant != TRIM(fisc_variant);
 
-SELECT sales_org
+SELECT
+	sales_org
 FROM bronze.crm_sales_orders
-WHERE sales_org != TRIM(sales_org)
+WHERE sales_org != TRIM(sales_org);
 
-SELECT currency
+SELECT
+	currency
 FROM bronze.crm_sales_orders
-WHERE currency != TRIM(currency)
+WHERE currency != TRIM(currency);
 
 -- Data Standardization & Consistency
-SELECT DISTINCT lifecycle_status
-FROM bronze.crm_sales_orders
+SELECT DISTINCT
+	lifecycle_status
+FROM bronze.crm_sales_orders;
 
-SELECT DISTINCT billing_status
-FROM bronze.crm_sales_orders
+SELECT DISTINCT
+	billing_status
+FROM bronze.crm_sales_orders;
 
-SELECT DISTINCT delivery_status
-FROM bronze.crm_sales_orders
+SELECT DISTINCT
+	delivery_status
+FROM bronze.crm_sales_orders;
 
-SELECT DISTINCT note_id
-FROM bronze.crm_sales_orders
+SELECT DISTINCT
+	note_id
+FROM bronze.crm_sales_orders;
 
-SELECT fiscal_year_period,
+SELECT
+	fiscal_year_period,
        FORMAT(EOMONTH(DATEFROMPARTS(LEFT(fiscal_year_period, 4), 
                                     fiscal_year_period % 100, 
                                     1)), 'yyyy-MM-dd') 
-       AS fiscal_year_period
+	AS fiscal_year_period
 FROM bronze.crm_sales_orders;
 
-
--- Check for Negative Amounts
-SELECT gross_amount
+-- Check for NULLs or Negative Values in Amounts
+-- Expectation: No Results
+SELECT
+	gross_amount
 FROM bronze.crm_sales_orders
-WHERE gross_amount <= 0
+WHERE gross_amount <= 0 OR gross_amount IS NULL;
 
-SELECT net_amount
+SELECT
+	net_amount
 FROM bronze.crm_sales_orders
-WHERE net_amount <= 0
+WHERE net_amount <= 0 OR net_amount IS NULL;
 
-SELECT tax_amount
+SELECT
+	tax_amount
 FROM bronze.crm_sales_orders
-WHERE tax_amount <= 0
-
+WHERE tax_amount <= 0 OR tax_amount IS NULL;
 
 -----------------------------------------------------------------------------------
 --ERP_ADDRESSES
