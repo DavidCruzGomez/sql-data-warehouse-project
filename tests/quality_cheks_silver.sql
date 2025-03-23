@@ -88,47 +88,51 @@ SELECT
 FROM bronze.crm_sales_orders
 WHERE tax_amount <= 0 OR tax_amount IS NULL;
 
------------------------------------------------------------------------------------
---ERP_ADDRESSES
------------------------------------------------------------------------------------
-
-
+-- ====================================================================
+-- Checking 'silver.erp_addresses'
+-- ====================================================================
 --Check For Nulls or Duplicates in Primary Key
 --Expectation: No Result
-
 SELECT
-address_id,
-COUNT(*)
+	address_id,
+	COUNT(*)
 FROM bronze.erp_addresses
 GROUP BY address_id 
-HAVING COUNT (*) > 1 OR address_id IS NULL
+HAVING COUNT (*) > 1 OR address_id IS NULL;
 
 --Check for unwanted Spaces
 --Expectation: No Result
-SELECT city
+SELECT
+	city
 FROM bronze.erp_addresses
-WHERE city != TRIM(city)
+WHERE city != TRIM(city);
 
-SELECT postal_code
+SELECT
+	postal_code
 FROM bronze.erp_addresses
-WHERE postal_code != TRIM(postal_code)
+WHERE postal_code != TRIM(postal_code);
 
-SELECT street
+SELECT
+	street
 FROM bronze.erp_addresses
-WHERE street != TRIM(street)
+WHERE street != TRIM(street);
 
-SELECT country
+SELECT
+	country
 FROM bronze.erp_addresses
-WHERE country != TRIM(country)
+WHERE country != TRIM(country);
 
-SELECT region
+SELECT
+	region
 FROM bronze.erp_addresses
-WHERE region != TRIM(region)
+WHERE region != TRIM(region);
 
--- Check for Negative Amounts
-SELECT building
+-- Check for NULLs or Negative Values in Building
+-- Expectation: No Results
+SELECT
+	building
 FROM bronze.erp_addresses
-WHERE building <= 0
+WHERE building <= 0 OR building IS NULL;
 
 
 -----------------------------------------------------------------------------------
