@@ -134,95 +134,104 @@ SELECT
 FROM bronze.erp_addresses
 WHERE building <= 0 OR building IS NULL;
 
-
------------------------------------------------------------------------------------
---ERP_BUSINESS_PARTNERS
------------------------------------------------------------------------------------
-
+-- ====================================================================
+-- Checking 'silver.erp_business_partners'
+-- ====================================================================
 --Check For Nulls or Duplicates in Primary Key
 --Expectation: No Result
-
 SELECT
-partner_id,
-COUNT(*)
+	partner_id,
+	COUNT(*)
 FROM bronze.erp_business_partners
 GROUP BY partner_id 
-HAVING COUNT (*) > 1 OR partner_id IS NULL
+HAVING COUNT (*) > 1 OR partner_id IS NULL;
 
 --Check for unwanted Spaces
 --Expectation: No Result
-SELECT email_address
+SELECT
+	email_address
 FROM bronze.erp_business_partners
-WHERE email_address != TRIM(email_address)
-
-SELECT web_address
-FROM bronze.erp_business_partners
-WHERE web_address != TRIM(web_address)
-
-SELECT company_name
-FROM bronze.erp_business_partners
-WHERE company_name != TRIM(company_name)
-
-SELECT legal_form
-FROM bronze.erp_business_partners
-WHERE legal_form != TRIM(legal_form)
-
-SELECT currency
-FROM bronze.erp_business_partners
-WHERE currency != TRIM(currency)
-
--- Data Standardization & Consistency
-SELECT DISTINCT partner_role
-FROM bronze.erp_business_partners
-
-SELECT DISTINCT email_address
-FROM bronze.erp_business_partners
-
-SELECT DISTINCT web_address
-FROM bronze.erp_business_partners
-
-SELECT DISTINCT company_name
-FROM bronze.erp_business_partners
-
-SELECT DISTINCT legal_form
-FROM bronze.erp_business_partners
-
-
------------------------------------------------------------------------------------
---ERP_EMPLOYEES
------------------------------------------------------------------------------------
-
---Check For Nulls or Duplicates in Primary Key
---Expectation: No Result
+WHERE email_address != TRIM(email_address);
 
 SELECT
-employee_id,
-COUNT(*)
+	web_address
+FROM bronze.erp_business_partners
+WHERE web_address != TRIM(web_address);
+
+SELECT
+	company_name
+FROM bronze.erp_business_partners
+WHERE company_name != TRIM(company_name);
+
+SELECT
+	legal_form
+FROM bronze.erp_business_partners
+WHERE legal_form != TRIM(legal_form);
+
+SELECT
+	currency
+FROM bronze.erp_business_partners
+WHERE currency != TRIM(currency);
+
+-- Data Standardization & Consistency
+SELECT DISTINCT
+	partner_role
+FROM bronze.erp_business_partners;
+
+SELECT DISTINCT
+	email_address
+FROM bronze.erp_business_partners;
+
+SELECT DISTINCT
+	web_address
+FROM bronze.erp_business_partners;
+
+SELECT DISTINCT
+	company_name
+FROM bronze.erp_business_partners;
+
+SELECT DISTINCT
+	legal_form
+FROM bronze.erp_business_partners;
+
+-- ====================================================================
+-- Checking 'silver.erp_employees'
+-- ====================================================================
+--Check For Nulls or Duplicates in Primary Key
+--Expectation: No Result
+SELECT
+	employee_id,
+	COUNT(*)
 FROM bronze.erp_employees
 GROUP BY employee_id 
-HAVING COUNT (*) > 1 OR employee_id IS NULL
+HAVING COUNT (*) > 1 OR employee_id IS NULL;
 
 --Check for unwanted Spaces
 --Expectation: No Result
-SELECT name_first
+SELECT
+	name_first
 FROM bronze.erp_employees
-WHERE name_first != TRIM(name_first)
+WHERE name_first != TRIM(name_first);
 
-SELECT name_middle
+SELECT
+	name_middle
 FROM bronze.erp_employees
-WHERE name_middle != TRIM(name_middle)
+WHERE name_middle != TRIM(name_middle);
 
-SELECT name_last
+SELECT
+	name_last
 FROM bronze.erp_employees
-WHERE name_last != TRIM(name_last)
+WHERE name_last != TRIM(name_last);
 
-SELECT email_address
+SELECT
+	email_address
 FROM bronze.erp_employees
-WHERE email_address != TRIM(email_address)
+WHERE email_address != TRIM(email_address);
 
-SELECT login_name
+SELECT
+	login_name
 FROM bronze.erp_employees
-WHERE login_name != TRIM(login_name)
+WHERE login_name != TRIM(login_name);
 
 -- Data Standardization & Consistency
 SELECT DISTINCT sex
