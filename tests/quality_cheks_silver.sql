@@ -321,83 +321,88 @@ SELECT DISTINCT
 	quantity_unit
 FROM bronze.erp_products;
 
-
------------------------------------------------------------------------------------
---ERP_PRODUCT_TEXTS
------------------------------------------------------------------------------------
-
+-- ====================================================================
+-- Checking 'silver.erp_product_texts'
+-- ====================================================================
 --Check For Nulls or Duplicates in Primary Key
 --Expectation: No Result
-
 SELECT
-prod_category_id,
-COUNT(*)
+	prod_category_id,
+	COUNT(*)
 FROM bronze.erp_product_texts	
 GROUP BY prod_category_id
-HAVING COUNT (*) > 1 OR prod_category_id IS NULL
+HAVING COUNT (*) > 1 OR prod_category_id IS NULL;
 
 --Check for unwanted Spaces
 --Expectation: No Result
-SELECT prod_category_id
+SELECT
+	prod_category_id
 FROM bronze.erp_product_texts
-WHERE prod_category_id != TRIM(prod_category_id)
+WHERE prod_category_id != TRIM(prod_category_id);
 
-SELECT language
+SELECT
+	language
 FROM bronze.erp_product_texts
-WHERE language != TRIM(language)
+WHERE language != TRIM(language);
 
-SELECT short_descr
+SELECT
+	short_descr
 FROM bronze.erp_product_texts
-WHERE short_descr != TRIM(short_descr)
+WHERE short_descr != TRIM(short_descr);
 
-SELECT medium_descr
+SELECT
+	medium_descr
 FROM bronze.erp_product_texts
-WHERE medium_descr != TRIM(medium_descr)
+WHERE medium_descr != TRIM(medium_descr);
 
 -- Data Standardization & Consistency
 SELECT
 TRIM(COALESCE(medium_descr, short_descr)) AS medium_descr --impute values with short_descr and remove blanks
 FROM bronze.erp_product_texts
 
-
------------------------------------------------------------------------------------
---ERP_SALES_ORDER_ITEMS
------------------------------------------------------------------------------------
-
+-- ====================================================================
+-- Checking 'silver.erp_sales_order_items'
+-- ====================================================================
 --Check For Nulls or Duplicates in Primary Key
 --Expectation: No Result
-
 SELECT
-sales_order_id,
-COUNT(*)
+	sales_order_id,
+	COUNT(*)
 FROM bronze.erp_sales_order_items	
 GROUP BY sales_order_id
-HAVING COUNT (*) > 1 OR sales_order_id IS NULL
+HAVING COUNT (*) > 1 OR sales_order_id IS NULL;
 
 --Check for unwanted Spaces
 --Expectation: No Result
-SELECT product_id
+SELECT
+	product_id
 FROM bronze.erp_sales_order_items
-WHERE product_id != TRIM(product_id)
+WHERE product_id != TRIM(product_id);
 
-SELECT currency
+SELECT
+	currency
 FROM bronze.erp_sales_order_items
-WHERE currency != TRIM(currency)
+WHERE currency != TRIM(currency);
 
-SELECT item_atp_status
+SELECT
+	item_atp_status
 FROM bronze.erp_sales_order_items
-WHERE item_atp_status != TRIM(item_atp_status)
+WHERE item_atp_status != TRIM(item_atp_status);
 
-SELECT quantity_unit
+SELECT
+	quantity_unit
 FROM bronze.erp_sales_order_items
-WHERE quantity_unit != TRIM(quantity_unit)
+WHERE quantity_unit != TRIM(quantity_unit);
 
 -- Data Standardization & Consistency
-SELECT DISTINCT note_id
-FROM bronze.erp_sales_order_items
+SELECT DISTINCT
+	note_id
+FROM bronze.erp_sales_order_items;
 
-SELECT DISTINCT op_item_pos
-FROM bronze.erp_sales_order_items
+SELECT DISTINCT
+	op_item_pos
+FROM bronze.erp_sales_order_items;
 
-SELECT DISTINCT item_atp_status
-FROM bronze.erp_sales_order_items
+SELECT DISTINCT
+	item_atp_status
+FROM bronze.erp_sales_order_items;
