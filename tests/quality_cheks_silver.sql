@@ -175,6 +175,16 @@ SELECT
 FROM bronze.erp_addresses
 WHERE building <= 0 OR building IS NULL;
 
+SELECT 
+    addr_validity_start_date
+FROM silver.erp_addresses
+WHERE 
+    LEN(addr_validity_start_date) != 10
+    OR addr_validity_start_date NOT LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
+    OR addr_validity_start_date > '2050-12-31'
+    OR addr_validity_start_date < '1900-01-01'
+    OR TRY_CAST(addr_validity_start_date AS DATE) IS NULL;
+
 -- ====================================================================
 -- Checking 'silver.erp_business_partners'
 -- ====================================================================
