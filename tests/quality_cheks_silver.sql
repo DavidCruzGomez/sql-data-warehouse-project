@@ -88,6 +88,13 @@ SELECT
 FROM bronze.crm_sales_orders
 WHERE tax_amount <= 0 OR tax_amount IS NULL;
 
+-- Check for Invalid Date Orders (Created Date > Changed Date)
+-- Expectation: No Results
+SELECT 
+    * 
+FROM silver.crm_prd_info
+WHERE changed_at < created_at;
+
 -- ====================================================================
 -- Checking 'silver.erp_addresses'
 -- ====================================================================
