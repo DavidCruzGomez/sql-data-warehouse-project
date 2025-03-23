@@ -105,6 +105,13 @@ WHERE
     OR sls_order_changed_at < '1900-01-01'
     OR TRY_CAST(sls_order_changed_at AS DATE) IS NULL;
 
+-- Check for Invalid Date Orders (Created Date > Changed Date)
+-- Expectation: No Results
+SELECT 
+    * 
+FROM bronze.crm_sales_orders
+WHERE changed_at < created_at;
+
 -- Check for NULLs or Negative Values in Amounts
 -- Expectation: No Results
 SELECT
@@ -121,13 +128,6 @@ SELECT
 	tax_amount
 FROM bronze.crm_sales_orders
 WHERE tax_amount <= 0 OR tax_amount IS NULL;
-
--- Check for Invalid Date Orders (Created Date > Changed Date)
--- Expectation: No Results
-SELECT 
-    * 
-FROM bronze.crm_sales_orders
-WHERE changed_at < created_at;
 
 -- ====================================================================
 -- Checking 'silver.erp_addresses'
@@ -244,6 +244,13 @@ FROM bronze.erp_business_partners;
 SELECT DISTINCT
 	legal_form
 FROM bronze.erp_business_partners;
+
+-- Check for Invalid Date Orders (Created Date > Changed Date)
+-- Expectation: No Results
+SELECT 
+    * 
+FROM bronze.erp_business_partners
+WHERE changed_at < created_at;
 
 -- ====================================================================
 -- Checking 'silver.erp_employees'
