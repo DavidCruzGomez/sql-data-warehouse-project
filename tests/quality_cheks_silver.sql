@@ -76,16 +76,6 @@ WHERE
     OR TRY_CAST(sls_order_fiscal_year_period AS DATE) IS NULL;
 
 SELECT 
-    sls_order_fiscal_year_period 
-FROM silver.crm_sales_orders
-WHERE 
-    LEN(sls_order_fiscal_year_period) != 10
-    OR sls_order_fiscal_year_period NOT LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
-    OR sls_order_fiscal_year_period > '2050-12-31'
-    OR sls_order_fiscal_year_period < '1900-01-01'
-    OR TRY_CAST(sls_order_fiscal_year_period AS DATE) IS NULL;
-
-SELECT 
     sls_order_created_at
 FROM silver.crm_sales_orders
 WHERE 
@@ -251,6 +241,28 @@ SELECT
     * 
 FROM bronze.erp_business_partners
 WHERE changed_at < created_at;
+
+-- Check for Invalid Dates
+-- Expectation: No Invalid Dates
+SELECT 
+    sls_order_created_at
+FROM silver.crm_sales_orders
+WHERE 
+    LEN(sls_order_created_at) != 10
+    OR sls_order_created_at NOT LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
+    OR sls_order_created_at > '2050-12-31'
+    OR sls_order_created_at < '1900-01-01'
+    OR TRY_CAST(sls_order_created_at AS DATE) IS NULL;
+
+SELECT 
+    sls_order_changed_at
+FROM silver.crm_sales_orders
+WHERE 
+    LEN(sls_order_changed_at) != 10
+    OR sls_order_changed_at NOT LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
+    OR sls_order_changed_at > '2050-12-31'
+    OR sls_order_changed_at < '1900-01-01'
+    OR TRY_CAST(sls_order_changed_at AS DATE) IS NULL;
 
 -- ====================================================================
 -- Checking 'silver.erp_employees'
