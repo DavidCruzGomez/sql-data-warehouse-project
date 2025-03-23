@@ -92,7 +92,7 @@ WHERE tax_amount <= 0 OR tax_amount IS NULL;
 -- Expectation: No Results
 SELECT 
     * 
-FROM silver.crm_prd_info
+FROM bronze.crm_sales_orders
 WHERE changed_at < created_at;
 
 -- ====================================================================
