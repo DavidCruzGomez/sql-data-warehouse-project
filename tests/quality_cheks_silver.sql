@@ -234,27 +234,12 @@ FROM bronze.erp_employees
 WHERE login_name != TRIM(login_name);
 
 -- Data Standardization & Consistency
-SELECT DISTINCT sex
-FROM bronze.erp_employees
-
-SELECT DISTINCT language
-FROM bronze.erp_employees
-
-SELECT REPLACE(name_first, '"', '') AS name_first
-FROM bronze.erp_employees
-
-SELECT COALESCE(name_middle, 'N/A') AS name_middle
-FROM bronze.erp_employees
-
-SELECT CASE 
-		WHEN sex = 'M' THEN 'Male'
-		WHEN sex = 'F' THEN 'Female'
-	END AS sex
+SELECT DISTINCT
+	sex
 FROM bronze.erp_employees;
 
-SELECT CASE 
-		WHEN language = 'E' THEN 'English'
-	END AS language
+SELECT DISTINCT
+	language
 FROM bronze.erp_employees;
 
 SELECT REPLACE(
@@ -266,78 +251,75 @@ SELECT REPLACE(
 			  , '.', '') AS phone_number
 FROM bronze.erp_employees;
 
-
------------------------------------------------------------------------------------
---ERP_PRODUCT_CATEGORIES
------------------------------------------------------------------------------------
-
+-- ====================================================================
+-- Checking 'silver.erp_product_categories'
+-- ====================================================================
 --Check For Nulls or Duplicates in Primary Key
 --Expectation: No Result
-
 SELECT
-prod_category_id,
-COUNT(*)
+	prod_category_id,
+	COUNT(*)
 FROM bronze.erp_product_categories
 GROUP BY prod_category_id 
-HAVING COUNT (*) > 1 OR prod_category_id IS NULL
+HAVING COUNT (*) > 1 OR prod_category_id IS NULL;
 
-
------------------------------------------------------------------------------------
---ERP_PRODUCT_CATEGORY_TEXT
------------------------------------------------------------------------------------
-
+-- ====================================================================
+-- Checking 'silver.erp_product_category_text'
+-- ====================================================================
 --Check For Nulls or Duplicates in Primary Key
 --Expectation: No Result
-
 SELECT
-prod_category_id,
-COUNT(*)
+	prod_category_id,
+	COUNT(*)
 FROM bronze.erp_product_category_text	
 GROUP BY prod_category_id 
-HAVING COUNT (*) > 1 OR prod_category_id IS NULL
+HAVING COUNT (*) > 1 OR prod_category_id IS NULL;
 
 --Check for unwanted Spaces
 --Expectation: No Result
-SELECT language
+SELECT
+	language
 FROM bronze.erp_product_category_text
-WHERE language != TRIM(language)
-
-SELECT short_descr
-FROM bronze.erp_product_category_text
-WHERE short_descr != TRIM(short_descr)
-
-
------------------------------------------------------------------------------------
---ERP_PRODUCTS
------------------------------------------------------------------------------------
-
---Check For Nulls or Duplicates in Primary Key
---Expectation: No Result
+WHERE language != TRIM(language);
 
 SELECT
-product_id,
-COUNT(*)
+	short_descr
+FROM bronze.erp_product_category_text
+WHERE short_descr != TRIM(short_descr);
+
+-- ====================================================================
+-- Checking 'silver.erp_products'
+-- ====================================================================
+--Check For Nulls or Duplicates in Primary Key
+--Expectation: No Result
+SELECT
+	product_id,
+	COUNT(*)
 FROM bronze.erp_products	
 GROUP BY product_id 
-HAVING COUNT (*) > 1 OR product_id IS NULL
+HAVING COUNT (*) > 1 OR product_id IS NULL;
 
 --Check for unwanted Spaces
 --Expectation: No Result
-SELECT product_id
+SELECT
+	product_id
 FROM bronze.erp_products
-WHERE product_id != TRIM(product_id)
+WHERE product_id != TRIM(product_id);
 
-SELECT type_code
+SELECT
+	type_code
 FROM bronze.erp_products
-WHERE type_code != TRIM(type_code)
+WHERE type_code != TRIM(type_code);
 
-SELECT prod_category_id
+SELECT
+	prod_category_id
 FROM bronze.erp_products
-WHERE prod_category_id != TRIM(prod_category_id)
+WHERE prod_category_id != TRIM(prod_category_id);
 
 -- Data Standardization & Consistency
-SELECT DISTINCT quantity_unit
-FROM bronze.erp_products
+SELECT DISTINCT
+	quantity_unit
+FROM bronze.erp_products;
 
 
 -----------------------------------------------------------------------------------
