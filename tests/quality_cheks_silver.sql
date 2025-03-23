@@ -312,14 +312,10 @@ SELECT DISTINCT
 	language
 FROM bronze.erp_employees;
 
-SELECT REPLACE(
-				REPLACE(
-						REPLACE(
-								phone_number, ' ', ''
-							   )
-						, '-', '')
-			  , '.', '') AS phone_number
-FROM bronze.erp_employees;
+SELECT
+	email_address
+FROM bronze.erp_employees
+WHERE email_address NOT LIKE '%@itelo.info';
 
 -- ====================================================================
 -- Checking 'silver.erp_product_categories'
@@ -332,6 +328,18 @@ SELECT
 FROM bronze.erp_product_categories
 GROUP BY prod_category_id 
 HAVING COUNT (*) > 1 OR prod_category_id IS NULL;
+
+-- Check for Invalid Dates
+-- Expectation: No Invalid Dates
+SELECT 
+    prod_cat_created_at
+FROM silver.erp_product_categories
+WHERE 
+    LEN(prod_cat_created_at) != 10
+    OR prod_cat_created_at NOT LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
+    OR prod_cat_created_at > '2050-12-31'
+    OR prod_cat_created_at < '1900-01-01'
+    OR TRY_CAST(prod_cat_created_at AS DATE) IS NULL;
 
 -- ====================================================================
 -- Checking 'silver.erp_product_category_text'
@@ -391,6 +399,47 @@ SELECT DISTINCT
 	quantity_unit
 FROM bronze.erp_products;
 
+-- Check for Invalid Dates
+-- Expectation: No Invalid Dates
+SELECT 
+    prod_created_at
+FROM silver.erp_products
+WHERE 
+    LEN(prod_created_at) != 10
+    OR prod_created_at NOT LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
+    OR prod_created_at > '2050-12-31'
+    OR prod_created_at < '1900-01-01'
+    OR TRY_CAST(prod_created_at AS DATE) IS NULL;
+
+SELECT 
+    prod_changed_at
+FROM silver.erp_products
+WHERE 
+    LEN(prod_changed_at) != 10
+    OR prod_changed_at NOT LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
+    OR prod_changed_at > '2050-12-31'
+    OR prod_changed_at < '1900-01-01'
+    OR TRY_CAST(prod_changed_at AS DATE) IS NULL;
+
+-- Check for Invalid Date Orders (Created Date > Changed Date)
+-- Expectation: No Results
+SELECT 
+    * 
+FROM bronze.erp_products
+WHERE changed_at < created_at;
+
+-- Check for NULLs or Negative Values in Weight Measure and price
+-- Expectation: No Results
+SELECT
+	weight_measure
+FROM bronze.erp_products
+WHERE weight_measure <= 0 OR weight_measure IS NULL;
+
+SELECT
+	price
+FROM bronze.erp_products
+WHERE price <= 0 OR price IS NULL;
+
 -- ====================================================================
 -- Checking 'silver.erp_product_texts'
 -- ====================================================================
@@ -424,11 +473,6 @@ SELECT
 	medium_descr
 FROM bronze.erp_product_texts
 WHERE medium_descr != TRIM(medium_descr);
-
--- Data Standardization & Consistency
-SELECT
-TRIM(COALESCE(medium_descr, short_descr)) AS medium_descr --impute values with short_descr and remove blanks
-FROM bronze.erp_product_texts
 
 -- ====================================================================
 -- Checking 'silver.erp_sales_order_items'
@@ -476,3 +520,42 @@ FROM bronze.erp_sales_order_items;
 SELECT DISTINCT
 	item_atp_status
 FROM bronze.erp_sales_order_items;
+
+-- Check for Invalid Dates
+-- Expectation: No Invalid Dates
+SELECT 
+    sls_order_delivery_date
+FROM silver.erp_sales_order_items
+WHERE 
+    LEN(sls_order_delivery_date) != 10
+    OR sls_order_delivery_date NOT LIKE '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
+    OR sls_order_delivery_date > '2050-12-31'
+    OR sls_order_delivery_date < '1900-01-01'
+    OR TRY_CAST(sls_order_delivery_date AS DATE) IS NULL;
+
+-- Check for NULLs or Negative Values in Amounts
+-- Expectation: No Results
+SELECT
+	gross_amount
+FROM bronze.erp_sales_order_items
+WHERE gross_amount <= 0 OR gross_amount IS NULL;
+
+SELECT
+	net_amount
+FROM bronze.erp_sales_order_items
+WHERE net_amount <= 0 OR net_amount IS NULL;
+
+SELECT
+	tax_amount
+FROM bronze.erp_sales_order_items
+WHERE tax_amount <= 0 OR tax_amount IS NULL;
+
+-- Check for Invalid Amounts
+-- Expectation: No Invalid Amounts
+SELECT
+    gross_amount,
+    net_amount,
+    tax_amount,
+    (net_amount + tax_amount) AS calculated_gross_amount
+FROM bronze.erp_sales_order_items
+WHERE gross_amount != (net_amount + tax_amount);
