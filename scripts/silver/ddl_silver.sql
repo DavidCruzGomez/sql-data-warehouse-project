@@ -67,7 +67,7 @@ CREATE TABLE silver.erp_business_partners (
 	ptnr_phone_number NVARCHAR(20),
 	--ptnr_fax_number NVARCHAR(20) NULL,				-- Business partner's fax number (completely empty)
 	ptnr_web_address NVARCHAR(100),
-	ptnr_address_id INT,						-- Address ID associated with the partner (foreign key to 'erp_addresses')
+	ptnr_address_id NVARCHAR(10),					-- Address ID associated with the partner (foreign key to 'erp_addresses')
 	ptnr_company_name NVARCHAR(100),
 	ptnr_legal_form NVARCHAR(10),
 	ptnr_created_by CHAR(10),					-- ID of the user who created the record
