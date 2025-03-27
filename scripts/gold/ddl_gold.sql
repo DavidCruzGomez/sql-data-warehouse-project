@@ -30,19 +30,19 @@ SELECT
     -- 2. Main product attributes
     --pi.prod_type_code			AS product_type_code, (Always PR)
     pi.prod_category_id			AS product_category_id,
-    pi.prod_supplier_partner_id AS product_supplier_partner_id,
+    pi.prod_supplier_partner_id 	AS product_supplier_partner_id,
     pi.prod_tax_tariff_code		AS product_tax_tariff_code,
     --pi.prod_quantity_unit		AS product_quantity_unit, (Always Each)
     pi.prod_weight_measure		AS product_weight_kg,
     --pi.prod_weight_unit		AS product_weight_unit, (Always Kg)
     --pi.prod_currency			AS product_currency, (Always USD)
-    pi.prod_price				AS product_price_$,
+    pi.prod_price			AS product_price_$,
 
     -- 3. Category and related attributes
     pc.prod_cat_created_by		AS product_category_created_by,
     pc.prod_cat_created_at		AS product_category_created_at,
-    --pct.language				AS category_language, (Always English and same as product_language)
-    pct.short_descr				AS category_short_description,
+    --pct.language			AS category_language, (Always English and same as product_language)
+    pct.short_descr			AS category_short_description,
 
     -- 4. Creation and modification metadata
     pi.prod_created_by			AS product_created_by,
@@ -51,9 +51,9 @@ SELECT
     pi.prod_changed_at			AS product_changed_at,
 
     -- 5. Additional product details
-    pt.language					AS product_language,
-    pt.short_descr				AS product_short_description,
-    pt.medium_descr				AS product_medium_description,
+    pt.language				AS product_language,
+    pt.short_descr			AS product_short_description,
+    pt.medium_descr			AS product_medium_description,
 
     -- 6. Technical fields
     pi.dwh_create_date
@@ -76,8 +76,8 @@ GO
 CREATE VIEW gold.dim_business_partners AS
 SELECT
     ROW_NUMBER() OVER (ORDER BY ptnr_id) AS business_partner_key, -- Surrogate key
-    bp.ptnr_id					AS partner_id,
-    bp.ptnr_role				AS partner_role,
+    bp.ptnr_id				AS partner_id,
+    bp.ptnr_role			AS partner_role,
     bp.ptnr_email_address		AS email_address,
     bp.ptnr_phone_number		AS phone_number,
     bp.ptnr_web_address			AS web_address,
@@ -91,16 +91,16 @@ SELECT
     bp.ptnr_currency			AS currency,
     bp.dwh_create_date,
 	ad.addr_address_type		AS address_type,
-	ad.addr_building			AS building,
-	ad.addr_city				AS city,
-	ad.addr_country				AS country,
-	ad.addr_id					AS address_id,
-	ad.addr_latitude			AS latitude,
-	ad.addr_longitude			AS longitude,
-	ad.addr_postal_code			AS postal_code,
-	ad.addr_region				AS region,
-	ad.addr_street				AS street,
-	ad.addr_validity_start_date AS address_validity_start_date
+	ad.addr_building		AS building,
+	ad.addr_city			AS city,
+	ad.addr_country			AS country,
+	ad.addr_id			AS address_id,
+	ad.addr_latitude		AS latitude,
+	ad.addr_longitude		AS longitude,
+	ad.addr_postal_code		AS postal_code,
+	ad.addr_region			AS region,
+	ad.addr_street			AS street,
+	ad.addr_validity_start_date	AS address_validity_start_date
 FROM silver.erp_business_partners AS bp
 FULL OUTER JOIN silver.erp_addresses ad
     ON bp.ptnr_address_id = ad.addr_id
@@ -114,17 +114,17 @@ GO
 
 CREATE VIEW gold.dim_employees AS
 SELECT
-	emp_id					AS employee_id,
+	emp_id				AS employee_id,
     emp_name_first			AS first_name,
     emp_name_middle			AS middle_name,
     emp_name_last			AS last_name,
-    emp_sex					AS sex,
+    emp_sex				AS sex,
     emp_language			AS language,
-    emp_phone_number		AS phone_number,
-    emp_email_address		AS email_address,
+    emp_phone_number			AS phone_number,
+    emp_email_address			AS email_address,
     emp_login_name			AS login_name,
     emp_address_id			AS address_id,
-    emp_validity_start_date	AS employee_validity_start_date,
+    emp_validity_start_date		AS employee_validity_start_date,
     dwh_create_date
 FROM silver.erp_employees
 
