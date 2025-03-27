@@ -28,7 +28,7 @@ SELECT
     pi.product_id,
 
     -- 2. Main product attributes
-    --pi.prod_type_code			AS product_type_code, (Always PR)
+    --pi.prod_type_code		AS product_type_code, (Always PR)
     pi.prod_category_id			AS product_category_id,
     pi.prod_supplier_partner_id 	AS product_supplier_partner_id,
     pi.prod_tax_tariff_code		AS product_tax_tariff_code,
