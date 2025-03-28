@@ -77,15 +77,20 @@ GO
 CREATE VIEW gold.dim_business_partners AS
 SELECT
 	ROW_NUMBER() OVER (ORDER BY ptnr_id) AS business_partner_key, -- Surrogate key
+	-- 4. Creation and modification metadata
+    pi.prod_created_by			AS product_created_by,
+    pi.prod_created_at			AS product_created_at,
+    pi.prod_changed_by			AS product_changed_by,
+    pi.prod_changed_at			AS product_changed_at,
    	-- 1. Primary key
-    bp.ptnr_id					AS partner_id,
+    bp.ptnr_id				AS partner_id,
 	
 	-- 2. Partner Role
-    bp.ptnr_role				AS partner_role,
+    bp.ptnr_role			AS partner_role,
 
 	-- 3. Company Information
-	bp.ptnr_company_name		AS company_name,
-	bp.ptnr_legal_form			AS company_legal_form,
+    bp.ptnr_company_name		AS company_name,
+    bp.ptnr_legal_form			AS company_legal_form,
 
 	-- 4. Contact Information
     bp.ptnr_email_address		AS email_address,
@@ -94,10 +99,10 @@ SELECT
 
 	-- 5. Address Information
     bp.ptnr_address_id			AS partner_address_id,
-	ad.addr_id					AS address_id,
+    ad.addr_id				AS address_id,
     ad.addr_address_type		AS address_type,
-	ad.addr_building			AS building,
-    ad.addr_street				AS street,
+    ad.addr_building			AS building,
+    ad.addr_street			AS street,
 	ad.addr_city				AS city,
 	ad.addr_region				AS region,
 	ad.addr_postal_code			AS postal_code,
