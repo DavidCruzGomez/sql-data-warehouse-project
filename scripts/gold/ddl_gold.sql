@@ -32,9 +32,9 @@ SELECT
     pi.prod_category_id			AS product_category_id,
     pi.prod_supplier_partner_id 	AS product_supplier_partner_id,
     pi.prod_tax_tariff_code		AS product_tax_tariff_code,
-    --pi.prod_quantity_unit		AS product_quantity_unit, (Always Each)
+    --pi.prod_quantity_unit		    AS product_quantity_unit, (Always Each)
     pi.prod_weight_measure		AS product_weight_kg,
-    --pi.prod_weight_unit		AS product_weight_unit, (Always Kg)
+    --pi.prod_weight_unit		    AS product_weight_unit, (Always Kg)
     --pi.prod_currency			AS product_currency, (Always USD)
     pi.prod_price			AS product_price_$,
 
