@@ -23,7 +23,7 @@ GO
 
 CREATE VIEW gold.dim_products AS
 SELECT
-	ROW_NUMBER() OVER (ORDER BY product_id) AS product_key, -- Surrogate key
+    ROW_NUMBER() OVER (ORDER BY product_id) AS product_key, -- Surrogate key
     -- 1. Primary key
     pi.product_id,
 
@@ -55,8 +55,9 @@ SELECT
     pt.short_descr			AS product_short_description,
     pt.medium_descr			AS product_medium_description,
 
-    -- 6. Technical fields
+    -- 6. Data Warehouse Metadata
     pi.dwh_create_date
+	
 FROM silver.erp_products AS pi
 LEFT JOIN silver.erp_product_categories pc
     ON pi.prod_category_id = pc.prod_category_id
@@ -76,31 +77,47 @@ GO
 CREATE VIEW gold.dim_business_partners AS
 SELECT
     	ROW_NUMBER() OVER (ORDER BY ptnr_id) AS business_partner_key, -- Surrogate key
-   	bp.ptnr_id			AS partner_id,
-    	bp.ptnr_role			AS partner_role,
-    	bp.ptnr_email_address		AS email_address,
-    	bp.ptnr_phone_number		AS phone_number,
-    	bp.ptnr_web_address		AS web_address,
-    	bp.ptnr_address_id		AS partner_address_id,
-    	bp.ptnr_company_name		AS company_name,
-    	bp.ptnr_legal_form		AS company_legal_form,
-    	bp.ptnr_created_by		AS partner_created_by,
-    	bp.ptnr_created_at		AS partner_created_at,
-    	bp.ptnr_changed_by		AS partner_changed_by,
-    	bp.ptnr_changed_at		AS partner_changed_at,
-   	bp.ptnr_currency		AS currency,
-    	bp.dwh_create_date,
-	ad.addr_address_type		AS address_type,
-	ad.addr_building		AS building,
-	ad.addr_city			AS city,
-	ad.addr_country			AS country,
-	ad.addr_id			AS address_id,
-	ad.addr_latitude		AS latitude,
-	ad.addr_longitude		AS longitude,
-	ad.addr_postal_code		AS postal_code,
-	ad.addr_region			AS region,
-	ad.addr_street			AS street,
-	ad.addr_validity_start_date	AS address_validity_start_date
+   	-- 1. Primary key
+    bp.ptnr_id					AS partner_id,
+	
+	-- 2. Partner Role
+    bp.ptnr_role				AS partner_role,
+
+	-- 3. Company Information
+	bp.ptnr_company_name		AS company_name,
+	bp.ptnr_legal_form			AS company_legal_form,
+
+	-- 4. Contact Information
+    bp.ptnr_email_address		AS email_address,
+    bp.ptnr_phone_number		AS phone_number,
+    bp.ptnr_web_address			AS web_address,
+
+	-- 5. Address Information
+    bp.ptnr_address_id			AS partner_address_id,
+	ad.addr_id					AS address_id,
+    ad.addr_address_type		AS address_type,
+	ad.addr_building			AS building,
+    ad.addr_street				AS street,
+	ad.addr_city				AS city,
+	ad.addr_region				AS region,
+	ad.addr_postal_code			AS postal_code,
+	ad.addr_country				AS country,
+	ad.addr_latitude			AS latitude,
+	ad.addr_longitude			AS longitude,
+	ad.addr_validity_start_date AS address_validity_start_date,
+
+	-- 6. Financial Information
+	bp.ptnr_currency			AS currency,
+
+	-- 7. Metadata: Creation & Modification
+    bp.ptnr_created_by			AS partner_created_by,
+    bp.ptnr_created_at			AS partner_created_at,
+    bp.ptnr_changed_by			AS partner_changed_by,
+    bp.ptnr_changed_at			AS partner_changed_at,
+    
+	-- 8. Data Warehouse Metadata
+    bp.dwh_create_date
+	
 FROM silver.erp_business_partners AS bp
 FULL OUTER JOIN silver.erp_addresses ad
     ON bp.ptnr_address_id = ad.addr_id
