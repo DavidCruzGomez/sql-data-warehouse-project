@@ -76,7 +76,7 @@ GO
 
 CREATE VIEW gold.dim_business_partners AS
 SELECT
-    	ROW_NUMBER() OVER (ORDER BY ptnr_id) AS business_partner_key, -- Surrogate key
+	ROW_NUMBER() OVER (ORDER BY ptnr_id) AS business_partner_key, -- Surrogate key
    	-- 1. Primary key
     bp.ptnr_id					AS partner_id,
 	
