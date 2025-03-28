@@ -35,7 +35,7 @@ SELECT
     --pi.prod_quantity_unit		    AS product_quantity_unit, (Always Each)
     pi.prod_weight_measure		AS product_weight_kg,
     --pi.prod_weight_unit		    AS product_weight_unit, (Always Kg)
-    --pi.prod_currency		AS product_currency, (Always USD)
+    --pi.prod_currency		    AS product_currency, (Always USD)
     pi.prod_price			AS product_price_$,
 
     -- 3. Category and related attributes
