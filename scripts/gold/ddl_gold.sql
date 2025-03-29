@@ -131,17 +131,26 @@ GO
 
 CREATE VIEW gold.dim_employees AS
 SELECT
-	emp_id				AS employee_id,
+    -- 1. Primary key
+    emp_id				AS employee_id,
+
+    -- 2. Employee Personal Information
     emp_name_first			AS first_name,
     emp_name_middle			AS middle_name,
     emp_name_last			AS last_name,
-    emp_sex				AS sex,
+    emp_sex					AS sex,
     emp_language			AS language,
-    emp_phone_number			AS phone_number,
-    emp_email_address			AS email_address,
+
+	-- 3. Contact Information
+    emp_phone_number		AS phone_number,
+    emp_email_address		AS email_address,
     emp_login_name			AS login_name,
+
+	-- 4. Address id and Employment start date
     emp_address_id			AS address_id,
-    emp_validity_start_date		AS employee_validity_start_date,
+    emp_validity_start_date	AS employee_validity_start_date,
+
+	-- 5. Data Warehouse Metadata
     dwh_create_date
 FROM silver.erp_employees
 
