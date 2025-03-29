@@ -43,7 +43,7 @@ This document outlines the naming conventions used for schemas, tables, views, c
   - `<category>`: Describes the role of the table, such as `dim` (dimension) or `fact` (fact table).  
   - `<entity>`: Descriptive name of the table, aligned with the business domain (e.g., `customers`, `products`, `sales`).  
   - Examples:
-    - `dim_customers` → Dimension table for customer data.  
+    - `dim_bussiness partners` → Dimension table for bussiness partners data.  
     - `fact_sales` → Fact table containing sales transactions.  
 
 #### **Glossary of Category Patterns**
