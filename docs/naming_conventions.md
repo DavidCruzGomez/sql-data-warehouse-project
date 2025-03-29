@@ -35,7 +35,7 @@ This document outlines the naming conventions used for schemas, tables, views, c
 - **`<sourcesystem>_<entity>`**  
   - `<sourcesystem>`: Name of the source system (e.g., `crm`, `erp`).  
   - `<entity>`: Exact table name from the source system.  
-  - Example: `crm_customer_info` → Customer information from the CRM system.
+  - Example: `erp_products` → Products information from the ERP system.
 
 ### **Gold Rules**
 - All names must use meaningful, business-aligned names for tables, starting with the category prefix.
