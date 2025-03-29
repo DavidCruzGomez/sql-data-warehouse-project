@@ -156,3 +156,34 @@ SELECT
 FROM silver.erp_employees
 
 GO
+
+-- =============================================================================
+-- Create Dimension: gold.dim_sales
+-- =============================================================================
+IF OBJECT_ID('gold.dim_sales', 'V') IS NOT NULL
+    DROP VIEW gold.dim_sales;
+GO
+
+CREATE VIEW gold.dim_sales AS
+SELECT
+	sls_order_id					AS order_id,
+    sls_order_created_by			AS order_created_by,
+    sls_order_created_at			AS order_created_at,
+    sls_order_changed_by			AS order_changed_by,
+    sls_order_changed_at			AS order_changed_at,
+    sls_order_fisc_variant			AS order_fiscal_variant,
+    sls_order_fiscal_year_period	AS order_fiscal_year_period,
+    sls_order_partner_id			AS order_partner_id,
+    sls_order_org,
+    sls_order_currency				AS currency,
+    sls_order_gross_amount			AS gross_amount,
+    sls_order_net_amount			AS net_amount,
+    sls_order_tax_amount			AS tax_amount,
+    sls_order_lifecycle_status		AS lifecycle_status,
+    sls_order_billing_status		AS billing_status,
+    sls_order_delivery_status		AS delivery_status,
+    dwh_create_date
+
+FROM silver.crm_sales_orders
+
+GO
