@@ -61,7 +61,7 @@ This document outlines the naming conventions used for schemas, tables, views, c
 - **`<table_name>_key`**  
   - `<table_name>`: Refers to the name of the table or entity the key belongs to.  
   - `_key`: A suffix indicating that this column is a surrogate key.  
-  - Example: `customer_key` → Surrogate key in the `dim_customers` table.
+  - Example: `product_key` → Surrogate key in the `dim_products` table.
   
 ### **Technical Columns**
 - All technical columns must start with the prefix `dwh_`, followed by a descriptive name indicating the column's purpose.
