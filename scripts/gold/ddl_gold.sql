@@ -166,7 +166,7 @@ GO
 
 CREATE VIEW gold.dim_sales AS
 SELECT
-    sls_order_id				AS order_id,
+    sls_order_id			AS order_id,
     sls_order_created_by		AS order_created_by,
     sls_order_created_at		AS order_created_at,
     sls_order_changed_by		AS order_changed_by,
