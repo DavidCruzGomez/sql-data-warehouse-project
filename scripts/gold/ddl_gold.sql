@@ -29,26 +29,26 @@ SELECT
 
     -- 2. Main product attributes
     --pi.prod_type_code		    AS product_type_code, (Always PR)
-    pi.prod_category_id			AS product_category_id,
-    pi.prod_supplier_partner_id 	AS product_supplier_partner_id,
-    pi.prod_tax_tariff_code		AS product_tax_tariff_code,
+    pi.prod_category_id			AS category_id,
+    pi.prod_supplier_partner_id 	AS supplier_id,
+    pi.prod_tax_tariff_code		AS tax_code,
     --pi.prod_quantity_unit		    AS product_quantity_unit, (Always Each)
-    pi.prod_weight_measure		AS product_weight_kg,
+    pi.prod_weight_measure		AS weight_kg,
     --pi.prod_weight_unit		    AS product_weight_unit, (Always Kg)
     --pi.prod_currency		    AS product_currency, (Always USD)
-    pi.prod_price			AS product_price_$,
+    pi.prod_price			AS price_usd,
 
     -- 3. Category and related attributes
-    pc.prod_cat_created_by		AS product_category_created_by,
-    pc.prod_cat_created_at		AS product_category_created_at,
+    pc.prod_cat_created_by		AS category_created_by,
+    pc.prod_cat_created_at		AS category_created_at,
     --pct.language			    AS category_language, (Always English and same as product_language)
     pct.short_descr			AS category_short_description,
 
     -- 4. Creation and modification metadata
-    pi.prod_created_by			AS product_created_by,
-    pi.prod_created_at			AS product_created_at,
-    pi.prod_changed_by			AS product_changed_by,
-    pi.prod_changed_at			AS product_changed_at,
+    pi.prod_created_by			AS created_by,
+    pi.prod_created_at			AS created_at,
+    pi.prod_changed_by			AS changed_by,
+    pi.prod_changed_at			AS changed_at,
 
     -- 5. Additional product details
     pt.language				AS product_language,
