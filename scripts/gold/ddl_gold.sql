@@ -187,3 +187,77 @@ SELECT
 FROM silver.crm_sales_orders
 
 GO
+
+-- =============================================================================
+-- Create Dimension: gold.dim_date
+-- =============================================================================
+IF OBJECT_ID('gold.dim_date', 'V') IS NOT NULL
+    DROP VIEW gold.dim_date;
+GO
+	
+CREATE VIEW gold.dim_date AS
+-- Dimensional date view with enriched calendar attributes for both created_at and changed_at fields
+
+-- Block 1: Order creation date
+SELECT DISTINCT
+    -- Surrogate key generated from the datetime and date type label
+    CAST(HASHBYTES('SHA1', 
+        CONVERT(VARCHAR, sls_order_created_at, 126) + '|created_at') AS BIGINT) AS surrogate_key,
+
+    -- 1. Raw date and its type label
+    sls_order_created_at                             AS [date],
+    'created_at'                                     AS [date_type],
+
+    -- 2. Date ID (used for joining with fact tables), formatted as YYYYMMDD
+    CONVERT(INT, FORMAT(sls_order_created_at, 'yyyyMMdd')) AS [date_id],
+
+    -- 3. Calendar attributes
+    YEAR(sls_order_created_at)                       AS [year],
+    DATEPART(QUARTER, sls_order_created_at)          AS [quarter],
+    MONTH(sls_order_created_at)                      AS [month],
+    DATENAME(MONTH, sls_order_created_at)            AS [month_name],
+    DATEPART(WEEK, sls_order_created_at)             AS [week],
+    DAY(sls_order_created_at)                        AS [day],
+    DATEPART(WEEKDAY, sls_order_created_at)          AS [day_of_week],
+    DATENAME(WEEKDAY, sls_order_created_at)          AS [weekday_name],
+
+    -- 4. Weekend flag: 1 for Saturday and Sunday, 0 otherwise
+    CASE 
+        WHEN DATEPART(WEEKDAY, sls_order_created_at) IN (1, 7) THEN 1
+        ELSE 0
+    END                                              AS [is_weekend]
+
+FROM silver.crm_sales_orders
+
+UNION
+
+-- Block 2: Order modification date
+SELECT DISTINCT
+    -- Surrogate key generated from the datetime and date type label
+    CAST(HASHBYTES('SHA1', 
+        CONVERT(VARCHAR, sls_order_changed_at, 126) + '|changed_at') AS BIGINT) AS surrogate_key,
+
+    -- 1. Raw date and its type label
+    sls_order_changed_at                             AS [date],
+    'changed_at'                                     AS [date_type],
+
+    -- 2. Date ID (used for joining with fact tables), formatted as YYYYMMDD
+    CONVERT(INT, FORMAT(sls_order_changed_at, 'yyyyMMdd')) AS [date_id],
+
+    -- 3. Calendar attributes
+    YEAR(sls_order_changed_at)                       AS [year],
+    DATEPART(QUARTER, sls_order_changed_at)          AS [quarter],
+    MONTH(sls_order_changed_at)                      AS [month],
+    DATENAME(MONTH, sls_order_changed_at)            AS [month_name],
+    DATEPART(WEEK, sls_order_changed_at)             AS [week],
+    DAY(sls_order_changed_at)                        AS [day],
+    DATEPART(WEEKDAY, sls_order_changed_at)          AS [day_of_week],
+    DATENAME(WEEKDAY, sls_order_changed_at)          AS [weekday_name],
+
+    -- 4. Weekend flag: 1 for Saturday and Sunday, 0 otherwise
+    CASE 
+        WHEN DATEPART(WEEKDAY, sls_order_changed_at) IN (1, 7) THEN 1
+        ELSE 0
+    END                                              AS [is_weekend]
+
+FROM silver.crm_sales_orders;
