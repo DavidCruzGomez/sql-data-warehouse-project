@@ -244,9 +244,10 @@ SELECT
     -- 1. Primary key
     sls_order_id			AS order_id,
 	
+    -- 2. Foreign keys
     sls_order_partner_id		AS order_partner_id,
 	
-    -- Sales metadata
+    -- 3. Sales metadata
     sls_order_created_by		AS order_created_by,
     sls_order_created_at		AS order_created_at,
     sls_order_changed_by		AS order_changed_by,
@@ -255,18 +256,18 @@ SELECT
     sls_order_fiscal_year_period	AS order_fiscal_year_period,
     sls_order_org,
 	
-    -- Measures
+    -- 4. Measures
     sls_order_currency			AS currency,
     sls_order_gross_amount		AS gross_amount,
     sls_order_net_amount		AS net_amount,
     sls_order_tax_amount		AS tax_amount,
 
-    -- Statuses
+    -- 5. Statuses
     sls_order_lifecycle_status		AS lifecycle_status,
     sls_order_billing_status		AS billing_status,
     sls_order_delivery_status		AS delivery_status,
 	
-    -- 5. Data Warehouse Metadata
+    -- 6. Data Warehouse Metadata
     dwh_create_date
 
 FROM silver.crm_sales_orders
