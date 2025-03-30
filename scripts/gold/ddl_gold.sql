@@ -93,7 +93,7 @@ SELECT
     bp.ptnr_web_address			AS website,
 
     -- 5. Address Information
-    --bp.ptnr_address_id		AS partner_address_id,(same as ad.addr_id)
+    --bp.ptnr_address_id		    AS partner_address_id,(same as ad.addr_id)
     ad.addr_id				AS address_id,
     ad.addr_address_type		AS address_type,
     ad.addr_building			AS building,
