@@ -138,17 +138,17 @@ SELECT
     emp_name_first			AS first_name,
     emp_name_middle			AS middle_name,
     emp_name_last			AS last_name,
-    emp_sex				AS sex,
-    emp_language			AS language,
+    emp_sex				AS gender,
+    emp_language			AS employee_language,
 
     -- 3. Contact Information
-    emp_phone_number			AS phone_number,
-    emp_email_address			AS email_address,
-    emp_login_name			AS login_name,
+    emp_phone_number			AS phone,
+    emp_email_address			AS email,
+    emp_login_name			AS login,
 
     -- 4. Address id and Employment start date
     emp_address_id			AS address_id,
-    emp_validity_start_date		AS employee_validity_start_date,
+    emp_validity_start_date		AS valid_from,
 
     -- 5. Data Warehouse Metadata
     dwh_create_date
