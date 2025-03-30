@@ -196,7 +196,6 @@ IF OBJECT_ID('gold.dim_date', 'V') IS NOT NULL
 GO
 	
 CREATE VIEW gold.dim_date AS
--- Dimensional date view with enriched calendar attributes for both created_at and changed_at fields
 
 -- Block 1: Order creation date
 SELECT DISTINCT
