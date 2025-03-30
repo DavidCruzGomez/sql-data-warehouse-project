@@ -85,15 +85,15 @@ SELECT
 
     -- 3. Company Information
     bp.ptnr_company_name		AS company_name,
-    bp.ptnr_legal_form			AS company_legal_form,
+    bp.ptnr_legal_form			AS legal_form,
 
     -- 4. Contact Information
-    bp.ptnr_email_address		AS email_address,
-    bp.ptnr_phone_number		AS phone_number,
-    bp.ptnr_web_address			AS web_address,
+    bp.ptnr_email_address		AS email,
+    bp.ptnr_phone_number		AS phone,
+    bp.ptnr_web_address			AS website,
 
     -- 5. Address Information
-    bp.ptnr_address_id			AS partner_address_id,
+    --bp.ptnr_address_id			AS partner_address_id,(same as ad.addr_id)
     ad.addr_id				AS address_id,
     ad.addr_address_type		AS address_type,
     ad.addr_building			AS building,
@@ -104,7 +104,7 @@ SELECT
     ad.addr_country			AS country,
     ad.addr_latitude			AS latitude,
     ad.addr_longitude			AS longitude,
-    ad.addr_validity_start_date 	AS address_validity_start_date,
+    --ad.addr_validity_start_date 	AS address_validity_start_date,(not useful for gold layer)
 
     -- 6. Financial Information
     bp.ptnr_currency			AS currency,
