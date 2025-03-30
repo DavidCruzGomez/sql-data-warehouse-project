@@ -21,9 +21,14 @@ The Gold Layer is the business-level data representation, structured to support 
 | product_category_created_by           | NVARCHAR(50)  | The gender of the customer (e.g., 'Male', 'Female', 'n/a').              |
 | product_category_created_at        | DATE          | The date of birth of the customer, formatted as YYYY-MM-DD (e.g., 1971-10-06).               |
 | category_short_description      | DATE          | The date and time when the customer record was created in the system|
-| category_short_description      | DATE          | The date and time when the customer record was created in the system|
-| category_short_description      | DATE          | The date and time when the customer record was created in the system|
-| category_short_description      | DATE          | The date and time when the customer record was created in the system|
+| product_created_by      | DATE          | The date and time when the customer record was created in the system|
+| product_created_at      | DATE          | The date and time when the customer record was created in the system|
+| product_changed_by      | DATE          | The date and time when the customer record was created in the system|
+| product_changed_at      | DATE          | The date and time when the customer record was created in the system|
+| product_language      | DATE          | The date and time when the customer record was created in the system|
+| product_short_description      | DATE          | The date and time when the customer record was created in the system|
+| product_medium_description      | DATE          | The date and time when the customer record was created in the system|
+| dwh_create_date      | DATE          | The date and time when the customer record was created in the system|
 
 ---
 
