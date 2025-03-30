@@ -231,6 +231,8 @@ SELECT DISTINCT
 
 FROM silver.crm_sales_orders;
 
+GO
+	
 -- =============================================================================
 -- Create Fact: gold.fact_sales
 -- =============================================================================
@@ -256,7 +258,7 @@ SELECT
     sls_order_fiscal_year_period	AS order_fiscal_year_period,
     sls_order_org,
 	
-    -- 4. Measures
+    -- 4. Financials
     sls_order_currency			AS currency,
     sls_order_gross_amount		AS gross_amount,
     sls_order_net_amount		AS net_amount,
@@ -271,5 +273,3 @@ SELECT
     dwh_create_date
 
 FROM silver.crm_sales_orders
-
-GO
