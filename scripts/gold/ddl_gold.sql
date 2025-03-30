@@ -196,18 +196,19 @@ IF OBJECT_ID('gold.dim_date', 'V') IS NOT NULL
 GO
 	
 CREATE VIEW gold.dim_date AS
-
+-- Date dimension view combining created_at and changed_at dates from sales orders
+	
 -- Block 1: Order creation date
 SELECT DISTINCT
-    -- Surrogate key generated from the datetime and date type label
+    -- Surrogate key generated from hash of date + type (ensures uniqueness per date_type)
     CAST(HASHBYTES('SHA1', 
         CONVERT(VARCHAR, sls_order_created_at, 126) + '|created_at') AS BIGINT) AS surrogate_key,
 
-    -- 1. Raw date and its type label
+    -- 1. Date and its type label
     sls_order_created_at                             AS [date],
     'created_at'                                     AS [date_type],
 
-    -- 2. Date ID (used for joining with fact tables), formatted as YYYYMMDD
+    -- 2. Date ID (used for joining with fact tables)
     CONVERT(INT, FORMAT(sls_order_created_at, 'yyyyMMdd')) AS [date_id],
 
     -- 3. Calendar attributes
@@ -232,15 +233,15 @@ UNION
 
 -- Block 2: Order modification date
 SELECT DISTINCT
-    -- Surrogate key generated from the datetime and date type label
+    -- Surrogate key generated from hash of date + type (ensures uniqueness per date_type)
     CAST(HASHBYTES('SHA1', 
         CONVERT(VARCHAR, sls_order_changed_at, 126) + '|changed_at') AS BIGINT) AS surrogate_key,
 
-    -- 1. Raw date and its type label
+    -- 1. Date and its type label
     sls_order_changed_at                             AS [date],
     'changed_at'                                     AS [date_type],
 
-    -- 2. Date ID (used for joining with fact tables), formatted as YYYYMMDD
+    -- 2. Date ID (used for joining with fact tables)
     CONVERT(INT, FORMAT(sls_order_changed_at, 'yyyyMMdd')) AS [date_id],
 
     -- 3. Calendar attributes
