@@ -240,23 +240,33 @@ GO
 
 CREATE VIEW gold.fact_sales AS
 SELECT
-    ROW_NUMBER() OVER (ORDER BY sls_order_id) AS sales_key,
+    ROW_NUMBER() OVER (ORDER BY sls_order_id) AS sales_key, -- Surrogate key
+    -- 1. Primary key
     sls_order_id			AS order_id,
+	
+    sls_order_partner_id		AS order_partner_id,
+	
+    -- Sales metadata
     sls_order_created_by		AS order_created_by,
     sls_order_created_at		AS order_created_at,
     sls_order_changed_by		AS order_changed_by,
     sls_order_changed_at		AS order_changed_at,
     sls_order_fisc_variant		AS order_fiscal_variant,
     sls_order_fiscal_year_period	AS order_fiscal_year_period,
-    sls_order_partner_id		AS order_partner_id,
     sls_order_org,
+	
+    -- Measures
     sls_order_currency			AS currency,
     sls_order_gross_amount		AS gross_amount,
     sls_order_net_amount		AS net_amount,
     sls_order_tax_amount		AS tax_amount,
+
+    -- Statuses
     sls_order_lifecycle_status		AS lifecycle_status,
     sls_order_billing_status		AS billing_status,
     sls_order_delivery_status		AS delivery_status,
+	
+    -- 5. Data Warehouse Metadata
     dwh_create_date
 
 FROM silver.crm_sales_orders
