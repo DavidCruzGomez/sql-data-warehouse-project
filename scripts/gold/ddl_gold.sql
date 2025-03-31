@@ -254,20 +254,20 @@ CREATE VIEW gold.fact_sales AS
 SELECT
     ROW_NUMBER() OVER (ORDER BY sls_order_id) AS sales_key, -- Surrogate key
     -- 1. Fact Table Keys
-    so.sls_order_id                   AS order_id,
+    so.sls_order_id                     AS order_id,
     soi.sls_order_item			AS item_id,
 	
     -- 2. Foreign keys
     sls_order_partner_id		AS order_partner_id,
 	
     -- 3. Sales metadata
-    sls_order_created_by		AS order_created_by,
-    sls_order_created_at		AS order_created_at,
-    sls_order_changed_by		AS order_changed_by,
-    sls_order_changed_at		AS order_changed_at,
-    sls_order_fisc_variant		AS order_fiscal_variant,
-    sls_order_fiscal_year_period	AS order_fiscal_year_period,
-    sls_order_org,
+    so.sls_order_created_by		AS order_created_by,
+    so.sls_order_created_at		AS order_created_at,
+    so.sls_order_changed_by		AS order_changed_by,
+    so.sls_order_changed_at		AS order_changed_at,
+    so.sls_order_fisc_variant		AS order_fiscal_variant,
+    so.sls_order_fiscal_year_period	AS order_fiscal_year_period,
+    so.sls_order_org,
 	
     -- 4. Financials
     sls_order_currency			AS currency,
