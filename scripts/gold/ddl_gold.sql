@@ -120,10 +120,10 @@ SELECT
     END AS currency,
 
     -- 7. Metadata: Creation & Modification
-    bp.ptnr_created_by			AS partner_created_by,
-    bp.ptnr_created_at			AS partner_created_at,
-    bp.ptnr_changed_by			AS partner_changed_by,
-    bp.ptnr_changed_at			AS partner_changed_at,
+    bp.ptnr_created_by				AS partner_created_by,
+    bp.ptnr_created_at				AS partner_created_at,
+    bp.ptnr_changed_by				AS partner_changed_by,
+    bp.ptnr_changed_at				AS partner_changed_at,
     
     -- 8. Data Warehouse Metadata
     bp.dwh_create_date
