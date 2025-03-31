@@ -253,8 +253,9 @@ GO
 CREATE VIEW gold.fact_sales AS
 SELECT
     ROW_NUMBER() OVER (ORDER BY sls_order_id) AS sales_key, -- Surrogate key
-    -- 1. Primary key
-    sls_order_id			AS order_id,
+    -- 1. Fact Table Keys
+    so.sls_order_id                   AS order_id,
+    soi.sls_order_item			AS item_id,
 	
     -- 2. Foreign keys
     sls_order_partner_id		AS order_partner_id,
