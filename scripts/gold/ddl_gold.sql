@@ -257,7 +257,7 @@ SELECT
     so.sls_order_id                     AS order_id,
     soi.sls_order_item			AS item_id,
 	
-    -- 2. Foreign keys
+    -- 2. Order items information
     soi.sls_order_product_id,
     soi.sls_order_quantity,
     soi.sls_order_net_amount,
