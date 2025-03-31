@@ -258,7 +258,10 @@ SELECT
     soi.sls_order_item			AS item_id,
 	
     -- 2. Foreign keys
-    sls_order_partner_id		AS order_partner_id,
+    soi.sls_order_product_id,
+    soi.sls_order_quantity,
+    soi.sls_order_net_amount,
+    (soi.sls_order_quantity * soi.sls_order_net_amount) AS total_price,
 	
     -- 3. Order metadata
     so.sls_order_created_by		AS order_created_by,
