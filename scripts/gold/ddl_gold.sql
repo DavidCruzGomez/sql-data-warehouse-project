@@ -93,8 +93,8 @@ SELECT
     COALESCE(bp.ptnr_web_address, 'N/A')	AS website,
 
     -- 5. Address Information
-    --bp.ptnr_address_id		    	AS partner_address_id,(same as ad.addr_id)
-    COALESCE(bp.ptnr_address_id, 'N/A')			AS address_id,
+    --bp.ptnr_address_id		    	    AS partner_address_id,(same as ad.addr_id)
+    COALESCE(bp.ptnr_address_id, 'N/A')		AS address_id,
     ad.addr_address_type			AS address_type,
     ad.addr_building				AS building,
     ad.addr_street				AS street,
@@ -104,7 +104,7 @@ SELECT
     ad.addr_country				AS country,
     ad.addr_latitude				AS latitude,
     ad.addr_longitude				AS longitude,
-    --ad.addr_validity_start_date 	        AS address_validity_start_date,(not useful for gold layer)
+    --ad.addr_validity_start_date 	            AS address_validity_start_date,(not useful for gold layer)
 
     -- 6. Financial Information
     CASE ad.addr_country
