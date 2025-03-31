@@ -88,13 +88,13 @@ SELECT
     COALESCE(bp.ptnr_legal_form, 'N/A')			AS legal_form,
 
     -- 4. Contact Information
-    bp.ptnr_email_address		AS email,
-    bp.ptnr_phone_number		AS phone,
-    bp.ptnr_web_address			AS website,
+    COALESCE(bp.ptnr_email_address, 'N/A')		AS email,
+    COALESCE(bp.ptnr_phone_number, 'N/A')		AS phone,
+    COALESCE(bp.ptnr_web_address, 'N/A')			AS website,
 
     -- 5. Address Information
     --bp.ptnr_address_id		    AS partner_address_id,(same as ad.addr_id)
-    ad.addr_id				AS address_id,
+    COALESCE(bp.ptnr_address_id, 'N/A')				AS address_id,
     ad.addr_address_type		AS address_type,
     ad.addr_building			AS building,
     ad.addr_street			AS street,
@@ -107,7 +107,17 @@ SELECT
     --ad.addr_validity_start_date 	    AS address_validity_start_date,(not useful for gold layer)
 
     -- 6. Financial Information
-    bp.ptnr_currency			AS currency,
+    CASE ad.addr_country
+        WHEN 'US' THEN 'USD'
+        WHEN 'CA' THEN 'CAD'
+        WHEN 'AU' THEN 'AUD'
+        WHEN 'DE' THEN 'EUR'
+        WHEN 'FR' THEN 'EUR'
+        WHEN 'GB' THEN 'GBP'
+        WHEN 'IN' THEN 'INR'
+        WHEN 'DU' THEN 'AED'  
+        ELSE 'N/A'
+    END AS currency,
 
     -- 7. Metadata: Creation & Modification
     bp.ptnr_created_by			AS partner_created_by,
