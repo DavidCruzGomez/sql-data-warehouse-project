@@ -260,25 +260,28 @@ SELECT
     -- 2. Foreign keys
     sls_order_partner_id		AS order_partner_id,
 	
-    -- 3. Sales metadata
+    -- 3. Order metadata
     so.sls_order_created_by		AS order_created_by,
     so.sls_order_created_at		AS order_created_at,
     so.sls_order_changed_by		AS order_changed_by,
     so.sls_order_changed_at		AS order_changed_at,
     so.sls_order_fisc_variant		AS order_fiscal_variant,
     so.sls_order_fiscal_year_period	AS order_fiscal_year_period,
-    so.sls_order_org,
+
+    -- 4. Partner and organization location
+    so.sls_order_partner_id             AS order_partner_id,
+    so.sls_order_org                    AS order_org,
 	
     -- 4. Financials
     sls_order_currency			AS currency,
-    sls_order_gross_amount		AS gross_amount,
-    sls_order_net_amount		AS net_amount,
-    sls_order_tax_amount		AS tax_amount,
+    sls_order_gross_amount		AS order_gross_amount,
+    sls_order_net_amount		AS order_net_amount,
+    sls_order_tax_amount		AS order_tax_amount,
 
     -- 5. Statuses
-    sls_order_lifecycle_status		AS lifecycle_status,
-    sls_order_billing_status		AS billing_status,
-    sls_order_delivery_status		AS delivery_status,
+    so.sls_order_lifecycle_status		AS lifecycle_status,
+    so.sls_order_billing_status		AS billing_status,
+    so.sls_order_delivery_status		AS delivery_status,
 	
     -- 6. Data Warehouse Metadata
     dwh_create_date
