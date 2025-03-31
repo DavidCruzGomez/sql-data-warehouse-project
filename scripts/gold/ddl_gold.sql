@@ -78,14 +78,14 @@ CREATE VIEW gold.dim_business_partners AS
 SELECT
     ROW_NUMBER() OVER (ORDER BY ptnr_id) AS business_partner_key, -- Surrogate key
     -- 1. Primary key
-    bp.ptnr_id				AS partner_id,
+    COALESCE(bp.ptnr_id, 'N/A')				AS partner_id,
 	
     -- 2. Partner Role
-    bp.ptnr_role			AS partner_role,
+    COALESCE(bp.ptnr_role, 'N/A')			AS partner_role,
 
     -- 3. Company Information
-    bp.ptnr_company_name		AS company_name,
-    bp.ptnr_legal_form			AS legal_form,
+    COALESCE(bp.ptnr_company_name, 'N/A')		AS company_name,
+    COALESCE(bp.ptnr_legal_form, 'N/A')			AS legal_form,
 
     -- 4. Contact Information
     bp.ptnr_email_address		AS email,
