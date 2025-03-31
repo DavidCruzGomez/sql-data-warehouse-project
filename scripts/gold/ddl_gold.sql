@@ -78,19 +78,19 @@ CREATE VIEW gold.dim_business_partners AS
 SELECT
     ROW_NUMBER() OVER (ORDER BY ptnr_id) AS business_partner_key, -- Surrogate key
     -- 1. Primary key
-    COALESCE(bp.ptnr_id, 'N/A')				AS partner_id,
+    COALESCE(bp.ptnr_id, 'N/A')			AS partner_id,
 	
     -- 2. Partner Role
-    COALESCE(bp.ptnr_role, 'N/A')			AS partner_role,
+    COALESCE(bp.ptnr_role, 'N/A')		AS partner_role,
 
     -- 3. Company Information
-    COALESCE(bp.ptnr_company_name, 'N/A')		AS company_name,
-    COALESCE(bp.ptnr_legal_form, 'N/A')			AS legal_form,
+    COALESCE(bp.ptnr_company_name, 'N/A')	AS company_name,
+    COALESCE(bp.ptnr_legal_form, 'N/A')		AS legal_form,
 
     -- 4. Contact Information
-    COALESCE(bp.ptnr_email_address, 'N/A')		AS email,
-    COALESCE(bp.ptnr_phone_number, 'N/A')		AS phone,
-    COALESCE(bp.ptnr_web_address, 'N/A')			AS website,
+    COALESCE(bp.ptnr_email_address, 'N/A')	AS email,
+    COALESCE(bp.ptnr_phone_number, 'N/A')	AS phone,
+    COALESCE(bp.ptnr_web_address, 'N/A')	AS website,
 
     -- 5. Address Information
     --bp.ptnr_address_id		    AS partner_address_id,(same as ad.addr_id)
