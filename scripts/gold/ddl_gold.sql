@@ -273,17 +273,19 @@ SELECT
     so.sls_order_org                    AS order_org,
 	
     -- 4. Financials
-    sls_order_currency			AS currency,
-    sls_order_gross_amount		AS order_gross_amount,
-    sls_order_net_amount		AS order_net_amount,
-    sls_order_tax_amount		AS order_tax_amount,
+    so.sls_order_currency		AS currency,
+    so.sls_order_gross_amount		AS order_gross_amount,
+    so.sls_order_net_amount		AS order_net_amount,
+    so.sls_order_tax_amount		AS order_tax_amount,
 
     -- 5. Statuses
-    so.sls_order_lifecycle_status		AS lifecycle_status,
+    so.sls_order_lifecycle_status	AS lifecycle_status,
     so.sls_order_billing_status		AS billing_status,
-    so.sls_order_delivery_status		AS delivery_status,
+    so.sls_order_delivery_status	AS delivery_status,
 	
     -- 6. Data Warehouse Metadata
-    dwh_create_date
+    so.dwh_create_date
 
-FROM silver.crm_sales_orders
+FROM silver.crm_sales_orders so
+LEFT JOIN silver.erp_sales_order_items soi
+    ON so.sls_order_id = soi.sls_order_id;
