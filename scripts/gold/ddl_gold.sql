@@ -254,11 +254,11 @@ CREATE VIEW gold.fact_sales AS
 SELECT
     ROW_NUMBER() OVER (ORDER BY sls_order_id) AS sales_key, -- Surrogate key
     -- 1. Foreign Keys from dimension tables
-    dp.product_key                AS product_key,
-    bp.business_partner_key       AS business_partner_key,
-    dc.surrogate_key              AS created_date_key,
-    dm.surrogate_key              AS modified_date_key,
-    emp.employee_id               AS employee_key,
+    dp.product_key                	AS product_key,
+    bp.business_partner_key       	AS business_partner_key,
+    dc.surrogate_key              	AS created_date_key,
+    dm.surrogate_key              	AS modified_date_key,
+    emp.employee_id               	AS employee_key,
 	
     -- 2. Fact Table Keys
     so.sls_order_id                     AS order_id,
