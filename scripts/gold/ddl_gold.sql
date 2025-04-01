@@ -22,8 +22,9 @@ IF OBJECT_ID('gold.dim_product', 'V') IS NOT NULL
 GO
 
 CREATE VIEW gold.dim_product AS
+WITH ranked_products AS (
 SELECT
-    ROW_NUMBER() OVER (ORDER BY product_id) AS product_key, -- Surrogate key
+    DENSE_RANK() OVER (ORDER BY product_id) AS product_key, -- Surrogate key
     -- 1. Primary key
     pi.product_id,
 
@@ -57,6 +58,10 @@ SELECT
 
     -- 6. Data Warehouse Metadata
     pi.dwh_create_date
+    ROW_NUMBER() OVER (
+        PARTITION BY pi.product_id
+        ORDER BY pi.dwh_create_date DESC
+        ) AS rn
 	
 FROM silver.erp_products AS pi
 LEFT JOIN silver.erp_product_categories pc
@@ -65,6 +70,9 @@ LEFT JOIN silver.erp_product_category_text pct
     ON pi.prod_category_id = pct.prod_category_id
 LEFT JOIN silver.erp_product_texts pt
     ON pi.product_id = pt.prod_category_id
+)
+SELECT * FROM ranked_products
+WHERE rn = 1;
 GO
 
 -- =============================================================================
