@@ -100,7 +100,7 @@ HAVING COUNT(*) > 1;
     FROM gold.fact_sales
     WHERE employee_key IS NULL;
 
--- Check the data model connectivity between fact and dimensions
+-- Check the data model connectivity between Fact and Dimensions
 SELECT 
     fs.fact_sales_id,
     dp.product_short_description,
