@@ -254,23 +254,23 @@ CREATE VIEW gold.fact_sales AS
 SELECT
     ROW_NUMBER() OVER (ORDER BY sls_order_id) AS sales_key, -- Surrogate key
     -- 1. Foreign Keys from dimension tables
-    dp.product_key                AS product_key, --
-    bp.business_partner_key       AS business_partner_key, --
-    dc.surrogate_key              AS created_date_key, --
-    dm.surrogate_key              AS modified_date_key, --
-    emp.employee_id               AS employee_key, --
+    dp.product_key                AS product_key,
+    bp.business_partner_key       AS business_partner_key,
+    dc.surrogate_key              AS created_date_key,
+    dm.surrogate_key              AS modified_date_key,
+    emp.employee_id               AS employee_key,
 	
-    -- 1. Fact Table Keys
+    -- 2. Fact Table Keys
     so.sls_order_id                     AS order_id,
     soi.sls_order_item			AS item_id,
 	
-    -- 2. Order items information
+    -- 3. Order items information
     soi.sls_order_product_id,
     soi.sls_order_quantity,
     soi.sls_order_net_amount,
     (soi.sls_order_quantity * soi.sls_order_net_amount) AS total_price,
 	
-    -- 3. Order metadata
+    -- 4. Order metadata
     so.sls_order_created_by		AS order_created_by,
     so.sls_order_created_at		AS order_created_at,
     so.sls_order_changed_by		AS order_changed_by,
@@ -278,22 +278,22 @@ SELECT
     so.sls_order_fisc_variant		AS order_fiscal_variant,
     so.sls_order_fiscal_year_period	AS order_fiscal_year_period,
 
-    -- 4. Partner and organization location
+    -- 5. Partner and organization location
     so.sls_order_partner_id             AS order_partner_id,
     so.sls_order_org                    AS order_org,
 	
-    -- 4. Financials
+    -- 6. Financials
     so.sls_order_currency		AS currency,
     so.sls_order_gross_amount		AS order_gross_amount,
     so.sls_order_net_amount		AS order_net_amount,
     so.sls_order_tax_amount		AS order_tax_amount,
 
-    -- 5. Statuses
+    -- 7. Statuses
     so.sls_order_lifecycle_status	AS lifecycle_status,
     so.sls_order_billing_status		AS billing_status,
     so.sls_order_delivery_status	AS delivery_status,
 	
-    -- 6. Data Warehouse Metadata
+    -- 8. Data Warehouse Metadata
     so.dwh_create_date
 
 FROM silver.crm_sales_orders so
