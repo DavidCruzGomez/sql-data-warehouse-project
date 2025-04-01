@@ -300,25 +300,25 @@ FROM silver.crm_sales_orders so
 LEFT JOIN silver.erp_sales_order_items soi
     ON so.sls_order_id = soi.sls_order_id
 
--- Join con dimensión producto
+-- Join with product dimension
 LEFT JOIN gold.dim_product dp
     ON soi.sls_order_product_id = dp.product_id
 
--- Join con dimensión socio de negocios
+-- Join with business partner dimension
 LEFT JOIN gold.dim_business_partner bp
     ON so.sls_order_partner_id = bp.partner_id
 
--- Join con dimensión de fechas - created_at
+-- Join with date dimension - created_at
 LEFT JOIN gold.dim_date dc
     ON so.sls_order_created_at = dc.date
     AND dc.date_type = 'created_at'
 
--- Join con dimensión de fechas - changed_at
+-- Join with date dimension - changed_at
 LEFT JOIN gold.dim_date dm
     ON so.sls_order_changed_at = dm.date
     AND dm.date_type = 'changed_at'
 
--- Join con dimensión empleados
+-- Join with employee dimension
 LEFT JOIN gold.dim_employee emp
     ON so.sls_order_created_by = emp.employee_id; 
 GO
