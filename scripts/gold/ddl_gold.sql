@@ -253,6 +253,13 @@ GO
 CREATE VIEW gold.fact_sales AS
 SELECT
     ROW_NUMBER() OVER (ORDER BY sls_order_id) AS sales_key, -- Surrogate key
+    -- 1. Foreign Keys desde dimensiones
+    dp.product_key                AS product_key,
+    bp.business_partner_key       AS business_partner_key,
+    dc.surrogate_key              AS created_date_key,
+    dm.surrogate_key              AS modified_date_key,
+    emp.employee_id               AS employee_key,
+	
     -- 1. Fact Table Keys
     so.sls_order_id                     AS order_id,
     soi.sls_order_item			AS item_id,
@@ -291,4 +298,27 @@ SELECT
 
 FROM silver.crm_sales_orders so
 LEFT JOIN silver.erp_sales_order_items soi
-    ON so.sls_order_id = soi.sls_order_id;
+    ON so.sls_order_id = soi.sls_order_id
+
+-- Join con dimensión producto
+LEFT JOIN gold.dim_product dp
+    ON soi.sls_order_product_id = dp.product_id
+
+-- Join con dimensión socio de negocios
+LEFT JOIN gold.dim_business_partner bp
+    ON so.sls_order_partner_id = bp.partner_id
+
+-- Join con dimensión de fechas - created_at
+LEFT JOIN gold.dim_date dc
+    ON so.sls_order_created_at = dc.date
+    AND dc.date_type = 'created_at'
+
+-- Join con dimensión de fechas - changed_at
+LEFT JOIN gold.dim_date dm
+    ON so.sls_order_changed_at = dm.date
+    AND dm.date_type = 'changed_at'
+
+-- Join con dimensión empleados
+LEFT JOIN gold.dim_employee emp
+    ON so.sls_order_created_by = emp.employee_id; 
+GO
