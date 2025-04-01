@@ -15,13 +15,13 @@ Usage:
 */
 
 -- =============================================================================
--- Create Dimension: gold.dim_products
+-- Create Dimension: gold.dim_product
 -- =============================================================================
-IF OBJECT_ID('gold.dim_products', 'V') IS NOT NULL
-    DROP VIEW gold.dim_products;
+IF OBJECT_ID('gold.dim_product', 'V') IS NOT NULL
+    DROP VIEW gold.dim_product;
 GO
 
-CREATE VIEW gold.dim_products AS
+CREATE VIEW gold.dim_product AS
 SELECT
     ROW_NUMBER() OVER (ORDER BY product_id) AS product_key, -- Surrogate key
     -- 1. Primary key
@@ -68,13 +68,13 @@ LEFT JOIN silver.erp_product_texts pt
 GO
 
 -- =============================================================================
--- Create Dimension: gold.dim_business_partners
+-- Create Dimension: gold.dim_business_partner
 -- =============================================================================
-IF OBJECT_ID('gold.dim_business_partners', 'V') IS NOT NULL
-    DROP VIEW gold.dim_business_partners;
+IF OBJECT_ID('gold.dim_business_partner', 'V') IS NOT NULL
+    DROP VIEW gold.dim_business_partner;
 GO
 
-CREATE VIEW gold.dim_business_partners AS
+CREATE VIEW gold.dim_business_partner AS
 SELECT
     ROW_NUMBER() OVER (ORDER BY ptnr_id) AS business_partner_key, -- Surrogate key
     -- 1. Primary key
@@ -133,13 +133,13 @@ FULL OUTER JOIN silver.erp_addresses ad
     ON bp.ptnr_address_id = ad.addr_id
 
 -- =============================================================================
--- Create Dimension: gold.dim_employees
+-- Create Dimension: gold.dim_employee
 -- =============================================================================
-IF OBJECT_ID('gold.dim_employees', 'V') IS NOT NULL
-    DROP VIEW gold.dim_employees;
+IF OBJECT_ID('gold.dim_employee', 'V') IS NOT NULL
+    DROP VIEW gold.dim_employee;
 GO
 
-CREATE VIEW gold.dim_employees AS
+CREATE VIEW gold.dim_employee AS
 SELECT
     -- 1. Primary key
     emp_id				AS employee_id,
