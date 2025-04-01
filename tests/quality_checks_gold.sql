@@ -138,4 +138,4 @@ SELECT
 FROM gold.fact_sales;
 GO
 
-SELECT * FROM gold.vw_fact_sales_join_coverage;
+SELECT * FROM gold.fact_sales_join_coverage;
