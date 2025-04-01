@@ -15,45 +15,90 @@ Usage Notes:
 */
 
 -- ====================================================================
--- Checking 'gold.dim_customers'
+-- Checking 'gold.dim_product'
 -- ====================================================================
--- Check for Uniqueness of Customer Key in gold.dim_customers
+-- Check for Uniqueness of Product Key in gold.dim_customers
 -- Expectation: No results 
 SELECT
-  product_id,
+  product_key,
   COUNT(*) AS duplicate_key_count
 FROM gold.dim_product
-GROUP BY product_id
+GROUP BY product_key
 HAVING COUNT(*) > 1;
 
+-- ====================================================================
+-- Checking 'gold.dim_business_partner'
+-- ====================================================================
+-- Check for Uniqueness of Business Partner Key in gold.dim_customers
+-- Expectation: No results 
+SELECT
+  business_partner_key,
+  COUNT(*) AS duplicate_key_count
+FROM gold.dim_business_partner
+GROUP BY business_partner_key
+HAVING COUNT(*) > 1;
 
+-- ====================================================================
+-- Checking 'gold.dim_employee'
+-- ====================================================================
+-- Check for Uniqueness of Employee Key in gold.dim_customers
+-- Expectation: No results 
+SELECT
+  employee_id,
+  COUNT(*) AS duplicate_key_count
+FROM gold.dim_employee
+GROUP BY employee_id
+HAVING COUNT(*) > 1;
 
+-- ====================================================================
+-- Checking 'gold.dim_date'
+-- ====================================================================
+-- Check for Uniqueness of Date Key in gold.dim_customers
+-- Expectation: No results 
+SELECT
+  surrogate_key,
+  COUNT(*) AS duplicate_key_count
+FROM gold.dim_date
+GROUP BY surrogate_key
+HAVING COUNT(*) > 1;
 
-
-
-Validar product_key
-SELECT COUNT(*) AS missing_products
+-- ====================================================================
+-- Checking 'gold.fact_sales'
+-- ====================================================================
+-- Check for Uniqueness of Sales Key in gold.fact_sales
+-- Expectation: No results 
+SELECT
+  sales_key,
+  COUNT(*) AS duplicate_key_count
 FROM gold.fact_sales
-WHERE product_key IS NULL;
+GROUP BY sales_key
+HAVING COUNT(*) > 1;
 
-Validar business_partner_key
-SELECT COUNT(*) AS missing_partners
-FROM gold.fact_sales
-WHERE business_partner_key IS NULL;
-
-Validar fechas
-SELECT COUNT(*) AS missing_created_dates
-FROM gold.fact_sales
-WHERE created_date_key IS NULL;
-
-SELECT COUNT(*) AS missing_modified_dates
-FROM gold.fact_sales
-WHERE modified_date_key IS NULL;
-
-Validar empleados:
-SELECT COUNT(*) AS missing_employees
-FROM gold.fact_sales
-WHERE employee_key IS NULL;
+-- Detect orphan foreign keys (no match in dimension)
+-- Expectation: No results
+    --Validate product_key
+    SELECT COUNT(*) AS missing_products
+    FROM gold.fact_sales
+    WHERE product_key IS NULL;
+    
+    --Validate business_partner_key
+    SELECT COUNT(*) AS missing_partners
+    FROM gold.fact_sales
+    WHERE business_partner_key IS NULL;
+    
+    --Validate dates
+    SELECT COUNT(*) AS missing_created_dates
+    FROM gold.fact_sales
+    WHERE created_date_key IS NULL;
+    
+    SELECT COUNT(*) AS missing_modified_dates
+    FROM gold.fact_sales
+    WHERE modified_date_key IS NULL;
+    
+    --Validate employees:
+    SELECT COUNT(*) AS missing_employees
+    FROM gold.fact_sales
+    WHERE employee_key IS NULL;
 
 
 
