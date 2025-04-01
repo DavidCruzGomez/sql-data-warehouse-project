@@ -128,7 +128,7 @@ SELECT
     SUM(CASE WHEN created_date_key IS NOT NULL THEN 1 ELSE 0 END) AS matched_created_dates,
     SUM(CASE WHEN modified_date_key IS NOT NULL THEN 1 ELSE 0 END) AS matched_modified_dates,
 
-    -- Porcentajes
+    -- Percentages
     CAST(SUM(CASE WHEN product_key IS NOT NULL THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS DECIMAL(5,2)) AS pct_product_match,
     CAST(SUM(CASE WHEN business_partner_key IS NOT NULL THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS DECIMAL(5,2)) AS pct_partner_match,
     CAST(SUM(CASE WHEN employee_key IS NOT NULL THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS DECIMAL(5,2)) AS pct_employee_match,
