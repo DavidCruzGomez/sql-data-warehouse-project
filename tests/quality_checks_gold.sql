@@ -116,3 +116,26 @@ LEFT JOIN gold.dim_date dc ON fs.created_date_key = dc.surrogate_key
 WHERE fs.total_price IS NOT NULL
 ORDER BY fs.total_price DESC;
 
+-- Check for Missing values of Foreign Keys in gold.fact_sales
+-- Expectation: No results 
+CREATE OR ALTER VIEW gold.vw_fact_sales_join_coverage AS
+SELECT
+    COUNT(*) AS total_records,
+
+    SUM(CASE WHEN product_key IS NOT NULL THEN 1 ELSE 0 END) AS matched_products,
+    SUM(CASE WHEN business_partner_key IS NOT NULL THEN 1 ELSE 0 END) AS matched_partners,
+    SUM(CASE WHEN employee_key IS NOT NULL THEN 1 ELSE 0 END) AS matched_employees,
+    SUM(CASE WHEN created_date_key IS NOT NULL THEN 1 ELSE 0 END) AS matched_created_dates,
+    SUM(CASE WHEN modified_date_key IS NOT NULL THEN 1 ELSE 0 END) AS matched_modified_dates,
+
+    -- Porcentajes
+    CAST(SUM(CASE WHEN product_key IS NOT NULL THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS DECIMAL(5,2)) AS pct_product_match,
+    CAST(SUM(CASE WHEN business_partner_key IS NOT NULL THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS DECIMAL(5,2)) AS pct_partner_match,
+    CAST(SUM(CASE WHEN employee_key IS NOT NULL THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS DECIMAL(5,2)) AS pct_employee_match,
+    CAST(SUM(CASE WHEN created_date_key IS NOT NULL THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS DECIMAL(5,2)) AS pct_created_date_match,
+    CAST(SUM(CASE WHEN modified_date_key IS NOT NULL THEN 1 ELSE 0 END) * 100.0 / COUNT(*) AS DECIMAL(5,2)) AS pct_modified_date_match
+
+FROM gold.fact_sales;
+GO
+
+SELECT * FROM gold.vw_fact_sales_join_coverage;
